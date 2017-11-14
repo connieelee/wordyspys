@@ -1,0 +1,43 @@
+{
+  "name": "avalon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "node-sass assets/stylesheets/style.scss -o public/stylesheets -w",
+    "build-bundle": "./node_modules/webpack/bin/webpack.js -w",
+    "start-dev": "npm run build-css & npm run build-bundle & nodemon ./server/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "chalk": "^1.1.3",
+    "express": "^4.15.3",
+    "morgan": "^1.8.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.0",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-socket.io": "^1.4.0",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-react": "^7.1.0",
+    "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
+    "webpack": "^3.1.0"
+  }
+}
