@@ -6,7 +6,7 @@
   "scripts": {
     "css-watch": "node-sass assets/stylesheets/style.scss -o public/stylesheets -w",
     "bundle-watch": "./node_modules/webpack/bin/webpack.js -w",
-    "build-watch": "npm run css-watch & npm run bundle-watch"
+    "start": "firebase serve & npm run css-watch & npm run bundle-watch"
   },
   "author": "",
   "license": "ISC",
