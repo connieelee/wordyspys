@@ -1,6 +1,7 @@
 export const generateRoomCode = () => {
   // 4-long alphanumeric string
   // must not conflict with a currectly active code
+  // room code 'test' is reserved for testing purposes
 };
 
 export const generateBoard = () => {
