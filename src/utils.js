@@ -1,5 +1,5 @@
-import db from './firebase/db';
 import _ from 'underscore';
+import db from './firebase/db';
 
 const randomAlphanumericString = length => {
   const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
