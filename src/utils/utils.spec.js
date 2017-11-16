@@ -1,3 +1,6 @@
+/* eslint-disable arrow-body-style */
+import firebase from 'firebase';
+import initializeFirebaseApp from './initFirebaseApp';
 import {
   generateRoomCode,
   generateBoard,
@@ -5,10 +8,18 @@ import {
 } from './';
 
 describe('utils', () => {
+  initializeFirebaseApp();
+  const db = firebase.database();
+
   describe('generateRoomCode', () => {
-    it('should return a string of length 4');
-    it('should only contain alphanumeric characters');
-    it('should never return a room code that is already taken');
+    it('returns a promise for a four-long alphanumeric string', () => {
+      return expect(generateRoomCode(db)).resolves.toMatch(/^[a-zA-Z0-9]{4}$/);
+    });
+    it('never resolves to a room code in use', () => {
+      return generateRoomCode(db)
+        .then(code => db.ref(`rooms/${code}`).once('value'))
+        .then(snapshot => expect(snapshot.val()).toBe(null));
+    });
   });
 
   describe('generateBoard', () => {

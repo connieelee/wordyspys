@@ -1,21 +1,14 @@
 import React from 'react';
-import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import initializeFirebaseApp from '../../utils/initFirebaseApp';
 
 const mapState = null;
 const mapDispatch = null;
 
 class AppContainer extends React.Component {
   componentDidMount() {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyDtFAAyGdTeX0KqlhNc0wR61BVUa7_SXx0',
-      authDomain: 'secret-titles.firebaseapp.com',
-      databaseURL: 'https://secret-titles.firebaseio.com',
-      projectId: 'secret-titles',
-      storageBucket: 'secret-titles.appspot.com',
-      messagingSenderId: '799476132267',
-    });
+    initializeFirebaseApp();
   }
 
   render() {

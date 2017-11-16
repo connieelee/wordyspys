@@ -7,7 +7,7 @@
     "css-watch": "./node_modules/node-sass/bin/node-sass assets/stylesheets/style.scss -o public/stylesheets -w",
     "bundle-watch": "./node_modules/webpack/bin/webpack.js -w",
     "start": "npm run css-watch & npm run bundle-watch & firebase serve",
-    "test": "./node_modules/jest/bin/jest.js"
+    "test": "./node_modules/jest/bin/jest.js --watch"
   },
   "author": "",
   "license": "ISC",

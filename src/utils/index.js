@@ -1,7 +1,16 @@
-export const generateRoomCode = () => {
-  // 4-long alphanumeric string
-  // must not conflict with a currectly active code
-  // room code 'test' is reserved for testing purposes
+const randomAlphanumericString = length => {
+  const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const randIdx = () => Math.floor(Math.random() * alphanumeric.length);
+  return new Array(length).fill().map(() => alphanumeric[randIdx()]).join('');
+};
+
+export const generateRoomCode = db => {
+  const code = randomAlphanumericString(4);
+  return db.ref(`rooms/${code}`).once('value')
+    .then(snapshot => {
+      if (snapshot.val()) return generateRoomCode(db);
+      return code;
+    });
 };
 
 export const generateBoard = () => {

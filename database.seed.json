@@ -1,4 +1,91 @@
 {
+  "rooms": {
+    "test": {
+      "roomCode": "test",
+      "players": {
+        "Connie": {
+          "team": "RED",
+          "isSpyMaster": true
+        },
+        "Cassio": {
+          "team": "BLUE",
+          "isSpyMaster": true
+        },
+        "Ashi": {
+          "team": "RED",
+          "isSpyMaster": false
+        },
+        "Gabe": {
+          "team": "BLUE",
+          "isSpyMaster": false
+        },
+        "Jordan": {
+          "team": "RED",
+          "isSpyMaster": false
+        },
+        "Mel": {
+          "team": "BLUE",
+          "isSpyMaster": false
+        }
+      },
+      "keyCard": {
+        "startingTeam": "RED",
+        "config": {
+          "0": {
+            "0": "BLUE",
+            "1": "RED",
+            "2": "BLUE",
+            "3": "NEUTRAL",
+            "4": "BLUE"
+          },
+          "1": {
+            "0": "NEUTRAL",
+            "1": "BLUE",
+            "2": "BLUE",
+            "3": "RED",
+            "4": "RED"
+          },
+          "2": {
+            "0": "RED",
+            "1": "RED",
+            "2": "NEUTRAL",
+            "3": "BLUE",
+            "4": "BLUE"
+          },
+          "3": {
+            "0": "BLUE",
+            "1": "NEUTRAL",
+            "2": "RED",
+            "3": "RED",
+            "4": "NEUTRAL"
+          },
+          "4": {
+            "0": "NEUTRAL",
+            "1": "ASSASSIN",
+            "2": "RED",
+            "3": "RED",
+            "4": "NEUTRAL"
+          }
+        }
+      },
+      "currentTurn": {
+        "turnNum": 1,
+        "team": "BLUE",
+        "clueWord": "Christmas",
+        "clueNum": 2,
+        "guessedNum": 0
+      },
+      "pastTurns": {
+        "0": {
+          "turnNum": 0,
+          "team": "RED",
+          "clueWord": "Animals",
+          "clueNum": 3,
+          "guessedNum": 3
+        }
+      }
+    }
+  },
   "words": {
     "0": "ALPHABET",
     "1": "ALPS",
