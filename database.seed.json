@@ -30,7 +30,7 @@
       },
       "keyCard": {
         "startingTeam": "RED",
-        "config": {
+        "keys": {
           "0": {
             "0": "BLUE",
             "1": "RED",

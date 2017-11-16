@@ -1,4 +1,5 @@
 import db from './firebase/db';
+import _ from 'underscore';
 
 const randomAlphanumericString = length => {
   const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -38,6 +39,17 @@ export const generateBoard = () => {
 };
 
 export const generateKeyCard = () => {
-  // create 5x5 grid with slots labeled for RED, BLUE, NEUTRAL, or ASSASSIN
-  // determine which team goes first and assign spots accordingly
+  const startingTeam = Math.floor(Math.random() * 2) ? 'RED' : 'BLUE';
+  const keys = [];
+  const reds = new Array(startingTeam === 'RED' ? 9 : 8).fill('RED');
+  const blues = new Array(startingTeam === 'BLUE' ? 9 : 8).fill('BLUE');
+  const neutrals = new Array(7).fill('NEUTRAL');
+  const shuffled = _.shuffle([...reds, ...blues, ...neutrals, 'ASSASSIN']);
+  for (let i = 0; i < shuffled.length; i += 5) {
+    keys.push(shuffled.slice(i, i + 5));
+  }
+  return {
+    startingTeam,
+    keys,
+  };
 };
