@@ -23,8 +23,39 @@ describe('utils', () => {
   });
 
   describe('generateBoard', () => {
-    it('should return a 5-by-5 array');
-    it('should include 25 unique, non-empty strings');
+    let board;
+    let cards = [];
+    beforeEach(() => {
+      return generateBoard(db)
+        .then(_board => {
+          board = _board;
+          board.forEach(row => row.forEach(card => cards.push(card)));
+        });
+    });
+    afterEach(() => { cards = []; });
+
+    it('returns a promise for a 5-by-5 array (board) of objects (cards)', () => {
+      expect(board).toHaveLength(5);
+      board.forEach(row => {
+        expect(row).toHaveLength(5);
+        row.forEach(card => expect(card).toEqual(expect.any(Object)));
+      });
+    });
+    it('cards should each hold a unique word (non-empty string)', () => {
+      const words = {};
+      cards.forEach(card => {
+        const word = card.word;
+        expect(word).not.toBeFalsy();
+        expect(words[word]).toBeFalsy();
+        words[word] = true;
+      });
+    });
+    it('cards should have a valid status property', () => {
+      const validStatuses = ['UNTOUCHED', 'RED', 'BLUE', 'ASSASSIN', 'NEUTRAL'];
+      cards.forEach(card => {
+        expect(validStatuses).toContain(card.status);
+      });
+    });
   });
 
   describe('generateKeyCard', () => {

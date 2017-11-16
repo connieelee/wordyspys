@@ -3,7 +3,6 @@ const randomAlphanumericString = length => {
   const randIdx = () => Math.floor(Math.random() * alphanumeric.length);
   return new Array(length).fill().map(() => alphanumeric[randIdx()]).join('');
 };
-
 export const generateRoomCode = db => {
   const code = randomAlphanumericString(4);
   return db.ref(`rooms/${code}`).once('value')
@@ -13,8 +12,27 @@ export const generateRoomCode = db => {
     });
 };
 
-export const generateBoard = () => {
-  // randomly select 25 unique words from words list to form 5x5 array
+const uniqueRandomNums = (min, max, length) => {
+  const nums = [];
+  while (nums.length < length) {
+    const num = Math.floor(Math.random() * (max - min));
+    if (nums.indexOf(num) === -1) nums.push(num);
+  }
+  return nums;
+};
+export const generateBoard = db => {
+  const emptyBoard = [[], [], [], [], []];
+  return db.ref('words').once('value')
+  .then(snapshot => {
+    const wordBank = snapshot.val();
+    return uniqueRandomNums(0, wordBank.length, 25)
+    .map(idx => wordBank[idx])
+    .reduce((board, word, i) => {
+      const card = { word, status: 'UNTOUCHED' };
+      board[Math.floor(i / 5)].push(card);
+      return board;
+    }, emptyBoard);
+  });
 };
 
 export const generateKeyCard = () => {
