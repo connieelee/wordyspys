@@ -1,9 +1,11 @@
+import db from './firebase/db';
+
 const randomAlphanumericString = length => {
   const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const randIdx = () => Math.floor(Math.random() * alphanumeric.length);
   return new Array(length).fill().map(() => alphanumeric[randIdx()]).join('');
 };
-export const generateRoomCode = db => {
+export const generateRoomCode = () => {
   const code = randomAlphanumericString(4);
   return db.ref(`rooms/${code}`).once('value')
     .then(snapshot => {
@@ -20,7 +22,7 @@ const uniqueRandomNums = (min, max, length) => {
   }
   return nums;
 };
-export const generateBoard = db => {
+export const generateBoard = () => {
   const emptyBoard = [[], [], [], [], []];
   return db.ref('words').once('value')
   .then(snapshot => {

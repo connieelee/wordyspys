@@ -1,22 +1,18 @@
 /* eslint-disable arrow-body-style */
-import firebase from 'firebase';
-import initializeFirebaseApp from './initFirebaseApp';
+import db from './firebase/db';
 import {
   generateRoomCode,
   generateBoard,
   generateKeyCard,
-} from './';
+} from './utils';
 
 describe('utils', () => {
-  initializeFirebaseApp();
-  const db = firebase.database();
-
   describe('generateRoomCode', () => {
     it('returns a promise for a four-long alphanumeric string', () => {
-      return expect(generateRoomCode(db)).resolves.toMatch(/^[a-zA-Z0-9]{4}$/);
+      return expect(generateRoomCode()).resolves.toMatch(/^[a-zA-Z0-9]{4}$/);
     });
     it('never resolves to a room code in use', () => {
-      return generateRoomCode(db)
+      return generateRoomCode()
         .then(code => db.ref(`rooms/${code}`).once('value'))
         .then(snapshot => expect(snapshot.val()).toBe(null));
     });
@@ -26,7 +22,7 @@ describe('utils', () => {
     let board;
     let cards = [];
     beforeEach(() => {
-      return generateBoard(db)
+      return generateBoard()
         .then(_board => {
           board = _board;
           board.forEach(row => row.forEach(card => cards.push(card)));
@@ -41,7 +37,7 @@ describe('utils', () => {
         row.forEach(card => expect(card).toEqual(expect.any(Object)));
       });
     });
-    it('cards should each hold a unique word (non-empty string)', () => {
+    it('cards should each hold a unique `word` (non-empty string)', () => {
       const words = {};
       cards.forEach(card => {
         const word = card.word;
@@ -50,7 +46,7 @@ describe('utils', () => {
         words[word] = true;
       });
     });
-    it('cards should have a valid status property', () => {
+    it('cards should have a valid `status` property', () => {
       const validStatuses = ['UNTOUCHED', 'RED', 'BLUE', 'ASSASSIN', 'NEUTRAL'];
       cards.forEach(card => {
         expect(validStatuses).toContain(card.status);
@@ -59,7 +55,11 @@ describe('utils', () => {
   });
 
   describe('generateKeyCard', () => {
-    it('should return an object specifying the startingTeam and config');
+    let keyCard;
+    beforeEach(() => {
+      return generateKeyCard()
+    });
+    it('returns a promise for an object with keys `startingTeam` and `config`');
     it('should only set startingTeam to BLUE or RED');
     describe('config', () => {
       it('should be a 5-by-5 array');

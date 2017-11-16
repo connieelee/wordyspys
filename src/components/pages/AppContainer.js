@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import initializeFirebaseApp from '../../utils/initFirebaseApp';
+import initializeFirebaseApp from '../../firebase/initialize';
 
 const mapState = null;
 const mapDispatch = null;
