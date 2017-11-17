@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/webpack/bin/webpack.js -w & firebase serve",
+    "start": "./node_modules/webpack/bin/webpack.js -w && firebase serve",
     "test": "./node_modules/jest/bin/jest.js --watch",
-    "deploy": "./node_modules/webpack/bin/webpack.js & firebase deploy"
+    "deploy": "./node_modules/webpack/bin/webpack.js && firebase deploy"
   },
   "author": "",
   "license": "ISC",
