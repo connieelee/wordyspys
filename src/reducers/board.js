@@ -1,7 +1,7 @@
 import { generateBoard } from '../utils';
 
 // constants
-const SET = 'SET';
+const SET = 'SET_BOARD';
 
 // actions
 const set = board => ({
@@ -10,7 +10,7 @@ const set = board => ({
 });
 
 // thunks
-export const getBoard = () => dispatch => (
+export const makeBoard = () => dispatch => (
   generateBoard()
   .then(board => dispatch(set(board)))
 );
