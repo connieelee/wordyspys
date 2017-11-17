@@ -5,11 +5,11 @@ export default function initFirebaseApp() {
   if (appInitialized) return;
   appInitialized = true;
   firebase.initializeApp({
-    apiKey: 'AIzaSyDtFAAyGdTeX0KqlhNc0wR61BVUa7_SXx0',
-    authDomain: 'secret-titles.firebaseapp.com',
-    databaseURL: 'https://secret-titles.firebaseio.com',
-    projectId: 'secret-titles',
-    storageBucket: 'secret-titles.appspot.com',
-    messagingSenderId: '799476132267',
+    apiKey: "AIzaSyBUHnx_5ubhgER6tYjNlapR_QGYbvoM8Gs",
+    authDomain: "wordyspys.firebaseapp.com",
+    databaseURL: "https://wordyspys.firebaseio.com",
+    projectId: "wordyspys",
+    storageBucket: "wordyspys.appspot.com",
+    messagingSenderId: "621295881525"
   });
 }

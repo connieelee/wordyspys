@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.full-height {
+  min-height: 100vh;
+}
+.side-margins-small {
+  margin: 0 1rem;
+}
+
+.cols-5 {
+  width: 20%;
+}
+.word-card {
+  height: 15vh;
+}

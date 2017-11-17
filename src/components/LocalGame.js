@@ -41,7 +41,7 @@ class LocalGame extends React.Component {
           </Grid>
         </Grid>
         <Grid item lg="4">
-          actions and stuff goes here
+          actions and stuff go here
         </Grid>
       </Grid>
     );
