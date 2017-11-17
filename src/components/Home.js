@@ -13,7 +13,7 @@ const Home = () => (
     className="full-height"
   >
     <Grid item>
-      <Typography type="display3">SECRET TITLES</Typography>
+      <Typography type="display3">WORDYSPYS</Typography>
     </Grid>
     <Grid item>
       <Button

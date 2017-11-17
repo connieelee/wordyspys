@@ -37,7 +37,7 @@ class LocalGame extends React.Component {
             </Grid>
           ))}
           <Grid item style={{ marginLeft: 'auto' }}>
-            <Typography type="display3" align="center">SECRET TITLES</Typography>
+            <Typography type="display3" align="center">WORDYSPYS</Typography>
           </Grid>
         </Grid>
         <Grid item lg="4">
