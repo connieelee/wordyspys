@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 const mapState = null;
 const mapDispatch = null;
 
-class JoinGame extends React.Component {
+class LocalGame extends React.Component {
   constructor() {
     super();
     this.state = {};
@@ -13,10 +13,10 @@ class JoinGame extends React.Component {
   render() {
     return (
       <div>
-        <h1>JOIN GAME</h1>
+        <h1>LOCAL GAME</h1>
       </div>
     );
   }
 }
 
-export default connect(mapState, mapDispatch)(JoinGame);
+export default connect(mapState, mapDispatch)(LocalGame);
