@@ -15,14 +15,14 @@ const mapDispatch = dispatch => ({
   getBoard() { dispatch(makeBoard()); },
 });
 
-class LocalGame extends React.Component {
+class Board extends React.Component {
   componentDidMount() {
     this.props.getBoard();
   }
 
   render() {
     return (
-      <Grid className="board">
+      <div>
         {this.props.board.map(row => (
           <Grid container>
             {row.map(card => (
@@ -34,14 +34,14 @@ class LocalGame extends React.Component {
             ))}
           </Grid>
         ))}
-      </Grid>
+      </div>
     );
   }
 }
 
-LocalGame.propTypes = {
+Board.propTypes = {
   board: PropTypes.arrayOf(PropTypes.array).isRequired,
   getBoard: PropTypes.func.isRequired,
 };
 
-export default connect(mapState, mapDispatch)(LocalGame);
+export default connect(mapState, mapDispatch)(Board);

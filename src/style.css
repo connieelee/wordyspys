@@ -6,19 +6,22 @@
 .full-height {
   min-height: 100vh;
 }
+
 .side-margins-small {
   margin: 0 1rem;
 }
 
-.board {
-  padding: 1rem;
-}
 .cols-5 {
   width: 20%;
 }
+
 .word-card {
   height: 15vh;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.code {
+  font-family: monospace;
 }
