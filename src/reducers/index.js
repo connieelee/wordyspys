@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import sample from './sampleReducer';
+import board from './board';
 
 export default combineReducers({
-  sample,
+  board,
+  // roomCode,
+  // keyCard,
 });
