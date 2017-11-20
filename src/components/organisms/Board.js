@@ -6,13 +6,13 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Card from 'material-ui/Card';
 
-import { makeBoard } from '../../reducers/actionCreators';
+import { createBoard } from '../../reducers/actionCreators';
 
 const mapState = state => ({
   board: state.board,
 });
 const mapDispatch = dispatch => ({
-  getBoard() { dispatch(makeBoard()); },
+  getBoard() { dispatch(createBoard()); },
 });
 
 class Board extends React.Component {

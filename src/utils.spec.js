@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import db from './firebase/db';
 import {
   generateRoomCode,
@@ -8,14 +7,14 @@ import {
 
 describe('utils', () => {
   describe('generateRoomCode', () => {
-    it('returns a promise for a four-long alphanumeric string', () => {
-      return expect(generateRoomCode()).resolves.toMatch(/^[a-zA-Z0-9]{4}$/);
-    });
-    it('never resolves to a room code in use', () => {
-      return generateRoomCode()
+    it('returns a promise for a four-long alphanumeric string', () => (
+      expect(generateRoomCode()).resolves.toMatch(/^[a-zA-Z0-9]{4}$/)
+    ));
+    it('never resolves to a room code in use', () => (
+      generateRoomCode()
         .then(code => db.ref(`rooms/${code}`).once('value'))
-        .then(snapshot => expect(snapshot.val()).toBe(null));
-    });
+        .then(snapshot => expect(snapshot.val()).toBe(null))
+    ));
   });
 
   describe('generateBoard', () => {
