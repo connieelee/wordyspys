@@ -6,12 +6,13 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import { Board, CurrentAction } from '../organisms';
 
-import { makeRoomCode } from '../../reducers/actionCreators';
+import { makeRoomCode, makeAndSaveKeyCard } from '../../reducers/actionCreators';
 
 const mapState = null;
 const mapDispatch = dispatch => ({
   setup() {
-    dispatch(makeRoomCode());
+    dispatch(makeRoomCode())
+    .then(action => dispatch(makeAndSaveKeyCard(action.roomCode)));
   },
   disconnect() {
     // should remove room from db

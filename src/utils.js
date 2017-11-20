@@ -49,7 +49,7 @@ export const generateKeyCard = () => {
     keys.push(shuffled.slice(i, i + 5));
   }
   return {
-    startingTeam,
     keys,
+    startingTeam,
   };
 };

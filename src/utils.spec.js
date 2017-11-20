@@ -29,7 +29,6 @@ describe('utils', () => {
           board.forEach(row => row.forEach(card => cards.push(card)));
         });
     });
-
     it('returns a promise for a 5-by-5 array (board) of objects (cards)', () => {
       expect(board).toHaveLength(5);
       board.forEach(row => {
@@ -57,15 +56,15 @@ describe('utils', () => {
   describe('generateKeyCard', () => {
     let keyCard;
     beforeEach(() => { keyCard = generateKeyCard(); });
-
-    it('returns an object with keys `startingTeam` and `keys`', () => {
-      expect(keyCard.startingTeam).toBeTruthy();
-      expect(keyCard.keys).toBeTruthy();
+    describe('returns an object', () => {
+      it('with keys `startingTeam` and `keys`', () => {
+        expect(keyCard.startingTeam).toBeTruthy();
+        expect(keyCard.keys).toBeTruthy();
+      });
+      it('startingTeam should be RED or BLUE', () => {
+        expect(keyCard.startingTeam).toEqual(expect.stringMatching(/RED|BLUE/));
+      });
     });
-    it('startingTeam should be RED or BLUE', () => {
-      expect(keyCard.startingTeam).toEqual(expect.stringMatching(/RED|BLUE/));
-    });
-
     describe('keys', () => {
       let flattenedKeys;
       beforeEach(() => {
