@@ -1,4 +1,5 @@
 import { generateRoomCode } from '../utils';
+import db from '../firebase/db';
 
 // constants
 const SET = 'SET_CODE';
@@ -10,10 +11,15 @@ const set = code => ({
 });
 
 // thunks
-export const makeRoomCode = () => dispatch => (
-  generateRoomCode()
-  .then(code => dispatch(set(code)))
-);
+export const createRoomCode = () => dispatch => {
+  let code;
+  return generateRoomCode()
+  .then(_code => {
+    code = _code;
+    return db.ref(`rooms/${code}/board`).set({ roomCode: code });
+  })
+  .then(() => dispatch(set(code)));
+};
 
 // reducer
 export default function (prevState = '', action) {

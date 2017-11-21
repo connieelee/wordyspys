@@ -11,7 +11,7 @@ const set = keyCard => ({
 });
 
 // thunks
-export const makeAndSaveKeyCard = roomCode => dispatch => {
+export const createKeyCard = roomCode => dispatch => {
   const keyCard = generateKeyCard();
   return db.ref(`rooms/${roomCode}/keyCard`).set(keyCard)
   .then(() => dispatch(set(keyCard)));

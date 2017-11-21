@@ -6,9 +6,6 @@ import boardReducer, { createBoard } from './board';
 const mockStore = configureMockStore([thunk]);
 
 describe('Reducers', () => {
-  describe('roomCode', () => {
-    
-  });
   describe('Board', () => {
     const testBoard = [
       [
