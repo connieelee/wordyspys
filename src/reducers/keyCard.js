@@ -5,10 +5,7 @@ import { generateKeyCard } from '../utils';
 const SET = 'SET_KEYCARD';
 
 // actions
-const set = keyCard => ({
-  type: SET,
-  keyCard,
-});
+const set = keyCard => ({ type: SET, keyCard });
 
 // thunks
 export const createKeyCard = roomCode => dispatch => {
@@ -18,7 +15,8 @@ export const createKeyCard = roomCode => dispatch => {
 };
 
 // reducer
-export default function (prevState = { keys: [], startingTeam: '' }, action) {
+const initialState = { keys: [], startingTeam: '' };
+export default function (prevState = initialState, action) {
   switch (action.type) {
     case SET:
       return action.keyCard;

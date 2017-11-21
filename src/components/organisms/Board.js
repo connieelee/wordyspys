@@ -6,42 +6,29 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Card from 'material-ui/Card';
 
-import { createBoard } from '../../reducers/actionCreators';
-
 const mapState = state => ({
   board: state.board,
 });
-const mapDispatch = dispatch => ({
-  getBoard() { dispatch(createBoard()); },
-});
+const mapDispatch = null;
 
-class Board extends React.Component {
-  componentDidMount() {
-    this.props.getBoard();
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.board.map(row => (
-          <Grid container>
-            {row.map(card => (
-              <Grid key={card.word} item className="cols-5">
-                <Card className="word-card">
-                  <Typography type="title">{card.word}</Typography>
-                </Card>
-              </Grid>
-            ))}
+const Board = ({ board }) => (
+  <div>
+    {board.map(row => (
+      <Grid container>
+        {row.map(card => (
+          <Grid key={card.word} item className="cols-5">
+            <Card className="word-card">
+              <Typography type="title">{card.word}</Typography>
+            </Card>
           </Grid>
         ))}
-      </div>
-    );
-  }
-}
+      </Grid>
+    ))}
+  </div>
+);
 
 Board.propTypes = {
   board: PropTypes.arrayOf(PropTypes.array).isRequired,
-  getBoard: PropTypes.func.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(Board);

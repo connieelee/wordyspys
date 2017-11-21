@@ -1,14 +1,11 @@
-import { generateBoard } from '../utils';
-import db from '../firebase/db';
+import { generateBoard } from '../../utils';
+import db from '../../firebase/db';
 
 // constants
 const SET = 'SET_BOARD';
 
 // actions
-const set = board => ({
-  type: SET,
-  board,
-});
+const set = board => ({ type: SET, board });
 
 // thunks
 export const createBoard = () => (dispatch, getState) => {
@@ -22,7 +19,8 @@ export const createBoard = () => (dispatch, getState) => {
 };
 
 // reducer
-export default function (prevState = [], action) {
+const initialState = [];
+export default function (prevState = initialState, action) {
   switch (action.type) {
     case SET:
       return action.board;
