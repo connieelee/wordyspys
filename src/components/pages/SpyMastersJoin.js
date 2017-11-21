@@ -1,22 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
-import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import SendIcon from 'material-ui-icons/Send';
+import RoomCodeForm from '../organisms/RoomCodeForm';
+import TeamPicker from '../organisms/TeamPicker';
 
 const mapState = null;
 const mapDispatch = null;
 
 class SpyMastersJoin extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      roomCodeInput: '',
-    };
+  componentDidMount() {
+    // set up listener for disconnecting
+  }
+
+  componentWillUnmount() {
+    // update db if a spymaster leaves
   }
 
   render() {
@@ -29,30 +29,14 @@ class SpyMastersJoin extends React.Component {
       >
         <Grid item container justify="center">
           <Typography type="headline">Welcome, Spy Master</Typography>
-          <Typography type="subheading">Please enter the four-digit room code below</Typography>
-          <form noValidate autoComplete="off">
-            <Grid container direction="column" alignItems="center">
-              <Grid item>
-                <TextField
-                  required
-                  label="Room Code (required)"
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item>
-                <Button raised color="primary">
-                  Send
-                  <SendIcon />
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+          <Switch>
+            <Route exact path="/masters" component={RoomCodeForm} />
+            <Route path="/masters/team" component={TeamPicker} />
+          </Switch>
         </Grid>
       </Grid>
     );
   }
 }
-
-SpyMastersJoin.propTypes = {};
 
 export default connect(mapState, mapDispatch)(SpyMastersJoin);

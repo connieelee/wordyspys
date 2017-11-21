@@ -13,7 +13,7 @@ export const createBoard = () => (dispatch, getState) => {
   return generateBoard()
   .then(_board => {
     board = _board;
-    return db.ref(`rooms/${getState().roomCode}/board`).set(board);
+    return db.ref(`rooms/${getState().roomCode.value}/board`).set(board);
   })
   .then(() => dispatch(set(board)));
 };

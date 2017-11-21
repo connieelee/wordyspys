@@ -29,7 +29,7 @@ const CurrentAction = ({ roomCode }) => (
         color="accent"
         align="center"
         style={{ fontFamily: 'monospace' }}
-      >{roomCode}
+      >{roomCode.value}
       </Typography>
     </CardContent>
     <CardActions>
@@ -39,7 +39,10 @@ const CurrentAction = ({ roomCode }) => (
 );
 
 CurrentAction.propTypes = {
-  roomCode: PropTypes.string.isRequired,
+  roomCode: PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    errors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
 };
 
 export default connect(mapState, mapDispatch)(CurrentAction);

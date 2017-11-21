@@ -14,13 +14,11 @@ import {
 
 const mapState = null;
 const mapDispatch = dispatch => ({
-  setup() {
+  setup: () => (
     dispatch(createRoom())
-    .then(() => dispatch(createBoard()));
-  },
-  disconnect() {
-    dispatch(deleteRoom());
-  },
+    .then(() => dispatch(createBoard()))
+  ),
+  disconnect: () => dispatch(deleteRoom()),
 });
 
 class LocalGame extends React.Component {
