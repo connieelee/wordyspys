@@ -12,8 +12,8 @@ describe('utils', () => {
     ));
     it('never resolves to a room code in use', () => (
       generateRoomCode()
-        .then(code => db.ref(`rooms/${code}`).once('value'))
-        .then(snapshot => expect(snapshot.val()).toBe(null))
+      .then(code => db.ref(`rooms/${code}`).once('value'))
+      .then(snapshot => expect(snapshot.val()).toBe(null))
     ));
   });
 
@@ -23,11 +23,12 @@ describe('utils', () => {
     beforeEach(() => {
       cards = [];
       return generateBoard()
-        .then(_board => {
-          board = _board;
-          board.forEach(row => row.forEach(card => cards.push(card)));
-        });
+      .then(_board => {
+        board = _board;
+        board.forEach(row => row.forEach(card => cards.push(card)));
+      });
     });
+
     it('returns a promise for a 5-by-5 array (board) of objects (cards)', () => {
       expect(board).toHaveLength(5);
       board.forEach(row => {
@@ -55,6 +56,7 @@ describe('utils', () => {
   describe('generateKeyCard', () => {
     let keyCard;
     beforeEach(() => { keyCard = generateKeyCard(); });
+
     describe('returns an object', () => {
       it('with keys `startingTeam` and `keys`', () => {
         expect(keyCard.startingTeam).toBeTruthy();
@@ -64,6 +66,7 @@ describe('utils', () => {
         expect(keyCard.startingTeam).toEqual(expect.stringMatching(/RED|BLUE/));
       });
     });
+
     describe('keys', () => {
       let flattenedKeys;
       beforeEach(() => {
@@ -72,6 +75,7 @@ describe('utils', () => {
           row.forEach(key => flattenedKeys.push(key));
         });
       });
+
       it('should be a 5-by-5 array', () => {
         expect(keyCard.keys).toHaveLength(5);
         keyCard.keys.forEach(row => {

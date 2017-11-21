@@ -44,6 +44,7 @@ describe('Reducers', () => {
         { word: 'BIRD', status: 'UNKNOWN' },
       ],
     ];
+
     it('should return initial state', () => {
       expect(boardReducer(undefined, {})).toEqual([]);
     });
@@ -51,12 +52,14 @@ describe('Reducers', () => {
       const setAction = { type: 'SET_BOARD', board: testBoard };
       expect(boardReducer([], setAction)).toEqual(testBoard);
     });
+
     describe('thunks', () => {
       let store;
       beforeEach(() => {
         store = mockStore({ roomCode: 'test' });
         return db.ref('rooms/test').set({ roomCode: 'test' });
       });
+
       describe('createBoard', () => {
         it('updates the db with newly created board', () => (
           store.dispatch(createBoard())

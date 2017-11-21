@@ -18,12 +18,15 @@ describe('Reducers', () => {
       const setAction = { type: 'UNSET_CODE' };
       expect(roomCodeReducer('test', setAction)).toEqual('');
     });
+
     describe('thunks', () => {
       let store;
       let code;
       beforeEach(() => { store = mockStore({ roomCode: 'test' }); });
+
       describe('createRoom', () => {
         afterEach(() => db.ref(`rooms/${code}`).remove());
+
         it('creates new room in db', () => (
           store.dispatch(createRoom())
           .then(action => {
@@ -40,8 +43,10 @@ describe('Reducers', () => {
           })
         ));
       });
+
       describe('deleteRoom', () => {
         afterEach(() => db.ref('rooms/test').set({ roomCode: 'test' }));
+
         it('deletes room from db', () => (
           store.dispatch(deleteRoom())
           .then(() => db.ref('rooms/test').once('value'))

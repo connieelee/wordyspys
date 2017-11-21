@@ -9,10 +9,10 @@ const randomAlphanumericString = length => {
 export const generateRoomCode = () => {
   const code = randomAlphanumericString(4);
   return db.ref(`rooms/${code}`).once('value')
-    .then(snapshot => {
-      if (snapshot.val()) return generateRoomCode();
-      return code;
-    });
+  .then(snapshot => {
+    if (snapshot.val()) return generateRoomCode();
+    return code;
+  });
 };
 
 const uniqueRandomNums = (min, max, length) => {
