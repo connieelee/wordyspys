@@ -1,5 +1,5 @@
-import db from '../firebase/db';
-import { generateKeyCard } from '../utils';
+import db from '../../firebase/db';
+import { generateKeyCard } from '../../utils';
 
 // constants
 const SET = 'SET_KEYCARD';

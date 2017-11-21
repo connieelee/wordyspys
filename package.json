@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "./node_modules/babel-cli/bin/babel-node.js ./seed/index.js",
     "start": "./node_modules/webpack/bin/webpack.js -w & firebase serve",
     "test": "./node_modules/jest/bin/jest.js --watch --verbose",
     "deploy": "firebase deploy"
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.25.0",
     "babel-jest": "^21.2.0",
     "babel-loader": "^7.0.0",
