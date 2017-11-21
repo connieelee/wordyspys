@@ -8,9 +8,9 @@ const SET = 'SET_KEYCARD';
 const set = keyCard => ({ type: SET, keyCard });
 
 // thunks
-export const createKeyCard = roomCode => dispatch => {
+export const createKeyCard = () => (dispatch, getState) => {
   const keyCard = generateKeyCard();
-  return db.ref(`rooms/${roomCode}/keyCard`).set(keyCard)
+  return db.ref(`rooms/${getState().roomCode}/keyCard`).set(keyCard)
   .then(() => dispatch(set(keyCard)));
 };
 
