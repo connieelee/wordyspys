@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import db from '../../firebase/db';
 import keyCardReducer, { createKeyCard } from './';
 
-import mockStoreInitialState from '../mockStoreInitialState';
+import mockStoreInitialState from '../../utils/mockStoreInitialState';
 import testKeyCard from '../../../seed/room/keyCard';
 
 const mockStore = configureMockStore([thunk]);

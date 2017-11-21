@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import db from '../../firebase/db';
 import boardReducer, { createBoard } from './';
 
-import mockStoreInitialState from '../mockStoreInitialState';
+import mockStoreInitialState from '../../utils/mockStoreInitialState';
 import testBoard from '../../../seed/room/board';
 
 const mockStore = configureMockStore([thunk]);
