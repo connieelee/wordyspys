@@ -1,4 +1,6 @@
-module.exports = {
+const webpack = require('webpack');
+
+module.exports = env => ({
   entry: './src/index.js',
   output: {
     path: __dirname,
@@ -19,4 +21,9 @@ module.exports = {
       },
     ],
   },
-};
+  plugins: [
+    new webpack.DefinePlugin({
+      ENV: JSON.stringify(env.ENV),
+    }),
+  ],
+});

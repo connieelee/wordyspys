@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "seed": "./node_modules/babel-cli/bin/babel-node.js ./seed/index.js",
-    "start": "./node_modules/webpack/bin/webpack.js -w & firebase serve",
-    "test": "./node_modules/jest/bin/jest.js --watch --verbose",
-    "deploy": "firebase deploy"
+    "seed": "babel-node ./seed/index.js",
+    "start": "webpack --env.ENV=dev -w & firebase serve",
+    "test": "jest --watch --verbose",
+    "deploy": "webpack --env.ENV=production && firebase deploy"
   },
   "author": "",
   "license": "ISC",
