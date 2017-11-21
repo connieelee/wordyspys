@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import db from '../../firebase/db';
-import roomCodeReducer, { createRoom } from './';
+import roomCodeReducer, { createRoom, deleteRoom } from './';
 
 const mockStore = configureMockStore([thunk]);
 
@@ -42,8 +42,15 @@ describe('Reducers', () => {
       });
       describe('deleteRoom', () => {
         afterEach(() => db.ref('rooms/test').set({ roomCode: 'test' }));
-        it('deletes room from db');
-        it('creates UNSET_CODE once room has been deleted');
+        it('deletes room from db', () => (
+          store.dispatch(deleteRoom())
+          .then(() => db.ref('rooms/test').once('value'))
+          .then(snapshot => expect(snapshot.val()).toBeFalsy())
+        ));
+        it('creates UNSET_CODE once room has been deleted', () => (
+          store.dispatch(deleteRoom())
+          .then(action => expect(action.type).toEqual('UNSET_CODE'))
+        ));
       });
     });
   });

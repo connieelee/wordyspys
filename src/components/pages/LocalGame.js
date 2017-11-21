@@ -6,7 +6,11 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import { Board, CurrentAction } from '../organisms';
 
-import { createRoom, createBoard } from '../../reducers/actionCreators';
+import {
+  createRoom,
+  createBoard,
+  deleteRoom,
+} from '../../reducers/actionCreators';
 
 const mapState = null;
 const mapDispatch = dispatch => ({
@@ -15,17 +19,19 @@ const mapDispatch = dispatch => ({
     .then(() => dispatch(createBoard()));
   },
   disconnect() {
-    // should remove room from db
+    dispatch(deleteRoom());
   },
 });
 
 class LocalGame extends React.Component {
   componentDidMount() {
     this.props.setup();
+    window.addEventListener('beforeunload', this.props.disconnect);
   }
 
   componentWillUnmount() {
     this.props.disconnect();
+    window.removeEventListener('beforeunload', this.props.disconnect);
   }
 
   render() {
