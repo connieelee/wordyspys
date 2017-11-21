@@ -10,6 +10,7 @@ import store from './store';
 import {
   Home,
   LocalGame,
+  SpyMastersJoin,
 } from './components';
 
 initializeFirebaseApp();
@@ -20,6 +21,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={Home} />
         <Route path="/local" component={LocalGame} />
+        <Route path="/masters" component={SpyMastersJoin} />
       </div>
     </Router>
   </Provider>,
