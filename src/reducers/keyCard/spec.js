@@ -2,6 +2,8 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import db from '../../firebase/db';
 import keyCardReducer, { createKeyCard } from './';
+
+import mockStoreInitialState from '../mockStoreInitialState';
 import testKeyCard from '../../../seed/room/keyCard';
 
 const mockStore = configureMockStore([thunk]);
@@ -19,7 +21,7 @@ describe('Key Card Reducer', () => {
   describe('thunks', () => {
     let store;
     beforeEach(() => {
-      store = mockStore({ roomCode: 'test' });
+      store = mockStore(mockStoreInitialState);
       return db.ref('rooms/test').set({ roomCode: 'test' });
     });
 

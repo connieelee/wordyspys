@@ -2,6 +2,8 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import db from '../../firebase/db';
 import boardReducer, { createBoard } from './';
+
+import mockStoreInitialState from '../mockStoreInitialState';
 import testBoard from '../../../seed/room/board';
 
 const mockStore = configureMockStore([thunk]);
@@ -18,7 +20,7 @@ describe('Board Reducer', () => {
   describe('thunks', () => {
     let store;
     beforeEach(() => {
-      store = mockStore({ roomCode: 'test' });
+      store = mockStore(mockStoreInitialState);
       return db.ref('rooms/test').set({ roomCode: 'test' });
     });
 

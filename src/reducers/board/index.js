@@ -2,10 +2,10 @@ import { generateBoard } from '../../utils';
 import db from '../../firebase/db';
 
 // constants
-const SET = 'SET_BOARD';
+const SET_BOARD = 'SET_BOARD';
 
 // actions
-const set = board => ({ type: SET, board });
+const setBoard = board => ({ type: SET_BOARD, board });
 
 // thunks
 export const createBoard = () => (dispatch, getState) => {
@@ -15,14 +15,14 @@ export const createBoard = () => (dispatch, getState) => {
     board = _board;
     return db.ref(`rooms/${getState().roomCode.value}/board`).set(board);
   })
-  .then(() => dispatch(set(board)));
+  .then(() => dispatch(setBoard(board)));
 };
 
 // reducer
 const initialState = [];
 export default function (prevState = initialState, action) {
   switch (action.type) {
-    case SET:
+    case SET_BOARD:
       return action.board;
     default:
       return prevState;

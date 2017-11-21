@@ -6,22 +6,37 @@ import roomCodeReducer, { createRoom, deleteRoom } from './';
 const mockStore = configureMockStore([thunk]);
 
 describe('Room Code Reducer', () => {
+  const initialState = {
+    value: '',
+    errors: [],
+  };
+
   it('should return initial state', () => {
-    expect(roomCodeReducer(undefined, {})).toEqual('');
+    expect(roomCodeReducer(undefined, {})).toEqual(initialState);
   });
   it('should handle SET_CODE', () => {
     const setAction = { type: 'SET_CODE', code: 'test' };
-    expect(roomCodeReducer('', setAction)).toEqual('test');
+    expect(roomCodeReducer(initialState, setAction)).toEqual({
+      value: 'test',
+      errors: [],
+    });
   });
   it('should handle UNSET_CODE', () => {
     const setAction = { type: 'UNSET_CODE' };
-    expect(roomCodeReducer('test', setAction)).toEqual('');
+    const state = {
+      value: 'test',
+      errors: [],
+    };
+    expect(roomCodeReducer(state, setAction)).toEqual(initialState);
   });
 
   describe('thunks', () => {
     let store;
     let code;
-    beforeEach(() => { store = mockStore({ roomCode: 'test' }); });
+    beforeEach(() => {
+      store = mockStore({ roomCode: initialState });
+      return db.ref('rooms/test').set({ roomCode: 'test' });
+    });
 
     describe('createRoom', () => {
       afterEach(() => db.ref(`rooms/${code}`).remove());
