@@ -13,6 +13,8 @@
   },
   "rules": {
     "react/jsx-filename-extension": 0,
-    "arrow-parens": 0
+    "arrow-parens": 0,
+    "import/no-extraneous-dependencies": [0, {"devDependencies": ["**/*.test.js", "**/*.spec.js"]}],
+    "no-underscore-dangle": [1, {"allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"]}]
   }
 }
