@@ -18,10 +18,10 @@ const CurrentAction = ({ roomCode }) => (
         CURRENT ACTION
       </Typography>
       <Typography type="headline" component="h2">
-        Spy Masters need key card
+        SPY MASTERS ONLY
       </Typography>
       <Typography component="p">
-        SPY MASTERS ONLY: To access the key card, visit wordyspys.firebaseapp.com/keys
+        To access the key card, visit wordyspys.firebaseapp.com/masters
         on a mobile device and enter the code displayed below
       </Typography>
       <Typography

@@ -12,7 +12,8 @@ const mapDispatch = null;
 
 class SpyMastersJoin extends React.Component {
   componentDidMount() {
-    // set up listener for disconnecting
+    // set up listener for room disconnecting
+    // set up handler for spymaster refreshing
   }
 
   componentWillUnmount() {
