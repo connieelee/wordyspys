@@ -20,6 +20,7 @@ export const createMove = (team, clue, number) => (dispatch, getState) => (
   })
 );
 export const listenOnCurrentMove = () => (dispatch, getState) => {
+  const ref = db.ref(`rooms/${getState().roomCode.value}/currentMove`);
   const listener = snapshot => {
     if (!snapshot) return;
     if (!snapshot.val()) return;
@@ -29,8 +30,8 @@ export const listenOnCurrentMove = () => (dispatch, getState) => {
     if (newClue && (newClue !== prevClue)) dispatch(setCurrentClue(newClue));
     if (newNumber && (newNumber !== prevNumber)) dispatch(setCurrentNumber(newNumber));
   };
-  db.ref(`rooms/${getState().roomCode.value}/currentMove`).on('value', listener);
-  return listener;
+  ref.on('value', listener);
+  return () => ref.off('value', listener);
 };
 
 // reducer

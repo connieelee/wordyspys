@@ -22,6 +22,7 @@ export const createSpymasters = () => (dispatch, getState) => (
   })
 );
 export const listenOnSpymasters = () => (dispatch, getState) => {
+  const ref = db.ref(`rooms/${getState().roomCode.value}/spymasters`);
   const listener = snapshot => {
     if (!snapshot) return;
     if (!snapshot.val()) return;
@@ -30,8 +31,8 @@ export const listenOnSpymasters = () => (dispatch, getState) => {
     if (newRed !== prevRed) dispatch(markMasterTaken('RED', newRed));
     if (newBlue !== prevBlue) dispatch(markMasterTaken('BLUE', newBlue));
   };
-  db.ref(`rooms/${getState().roomCode.value}/spymasters`).on('value', listener);
-  return listener;
+  ref.on('value', listener);
+  return () => ref.off('value', listener);
 };
 export const claimMaster = color => (dispatch, getState) => (
   db.ref(`rooms/${getState().roomCode.value}/spymasters/${color}`).set(true)
@@ -41,7 +42,11 @@ export const disconnectMaster = () => (dispatch, getState) => {
   const ownTeam = getState().spymasters.ownTeam;
   const code = getState().roomCode.value;
   if (!ownTeam) return null;
-  return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false)
+  return db.ref(`rooms/${code}`).once('value')
+  .then(snapshot => {
+    if (!snapshot.val()) return null;
+    return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false);
+  })
   .then(() => dispatch(unsetMasterTeam()));
 };
 

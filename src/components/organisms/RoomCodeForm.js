@@ -48,6 +48,7 @@ class RoomCodeForm extends React.Component {
     .then(error => {
       if (!error) {
         this.props.populateState(code);
+        this.props.attachRoomListener(code);
         this.props.history.push('/masters/team');
       }
     });
@@ -91,6 +92,7 @@ class RoomCodeForm extends React.Component {
 RoomCodeForm.propTypes = {
   validateCode: PropTypes.func.isRequired,
   populateState: PropTypes.func.isRequired,
+  attachRoomListener: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   errors: PropTypes.arrayOf(PropTypes.string),
 };

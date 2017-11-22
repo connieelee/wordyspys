@@ -35,6 +35,17 @@ export const validateCode = code => dispatch => {
     return dispatch(addError(`Room ${code} does not exist`));
   });
 };
+export const onRoomDisconnect = callback => (dispatch, getState) => {
+  const ref = db.ref(`rooms/${getState().roomCode.value}/roomCode`);
+  const listener = snapshot => {
+    if (!snapshot.val()) {
+      callback();
+      ref.off('value', listener);
+    }
+  };
+  ref.on('value', listener);
+  return () => ref.off('value', listener);
+};
 
 // reducer
 const initialState = {

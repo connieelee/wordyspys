@@ -14,6 +14,7 @@ import {
 import {
   claimMaster,
   disconnectMaster,
+  onRoomDisconnect,
 } from '../../reducers/actionCreators';
 
 const mapState = state => ({
@@ -22,22 +23,27 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
   claimMaster: color => dispatch(claimMaster(color)),
   disconnect: () => dispatch(disconnectMaster()),
+  onRoomDisconnect: callback => dispatch(onRoomDisconnect(callback)),
 });
 
 class SpyMasters extends React.Component {
   constructor() {
     super();
     this.renderWithRedirect = this.renderWithRedirect.bind(this);
+    this.attachRoomListener = this.attachRoomListener.bind(this);
   }
 
   componentDidMount() {
-    // TODO: set up listener for room disconnecting
     window.addEventListener('beforeunload', this.props.disconnect);
   }
 
   componentWillUnmount() {
     this.props.disconnect();
     window.removeEventListener('beforeunload', this.props.disconnect);
+  }
+
+  attachRoomListener() {
+    this.props.onRoomDisconnect(() => this.props.history.push('/masters'));
   }
 
   renderWithRedirect(Component) {
@@ -66,7 +72,12 @@ class SpyMasters extends React.Component {
           <Switch>
             <Route path="/masters/team" render={this.renderWithRedirect(TeamPicker)} />
             <Route path="/masters/key" render={this.renderWithRedirect(KeyCardView)} />
-            <Route path="/masters" component={RoomCodeForm} />
+            <Route
+              path="/masters"
+              render={props => (
+                <RoomCodeForm attachRoomListener={this.attachRoomListener} {...props} />
+              )}
+            />
           </Switch>
         </Grid>
       </Grid>
@@ -80,6 +91,7 @@ SpyMasters.propTypes = {
     error: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   disconnect: PropTypes.func.isRequired,
+  onRoomDisconnect: PropTypes.func.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(SpyMasters);
