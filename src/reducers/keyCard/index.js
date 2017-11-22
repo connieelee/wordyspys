@@ -1,5 +1,6 @@
 import db from '../../firebase/db';
 import { generateKeyCard } from '../../utils';
+import { createMove } from '../actionCreators';
 
 // constants
 const SET_KEYCARD = 'SET_KEYCARD';
@@ -8,9 +9,10 @@ const SET_KEYCARD = 'SET_KEYCARD';
 const setKeyCard = keyCard => ({ type: SET_KEYCARD, keyCard });
 
 // thunks
-const createKeyCard = () => (dispatch, getState) => {
+export const createKeyCard = () => (dispatch, getState) => {
   const keyCard = generateKeyCard();
   return db.ref(`rooms/${getState().roomCode.value}/keyCard`).set(keyCard)
+  .then(() => dispatch(createMove(keyCard.startingTeam)))
   .then(() => dispatch(setKeyCard(keyCard)));
 };
 export const readKeyCard = () => (dispatch, getState) => (

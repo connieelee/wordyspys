@@ -24,6 +24,7 @@ export const createSpymasters = () => (dispatch, getState) => (
 export const listenOnSpymasters = () => (dispatch, getState) => {
   const listener = snapshot => {
     if (!snapshot) return;
+    if (!snapshot.val()) return;
     const { RED: newRed, BLUE: newBlue } = snapshot.val();
     const { RED: prevRed, BLUE: prevBlue } = getState().spymasters.taken;
     if (newRed !== prevRed) dispatch(markMasterTaken('RED', newRed));

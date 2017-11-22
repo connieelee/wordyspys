@@ -31,9 +31,13 @@ describe('Key Card Reducer', () => {
         .then(action => Promise.all([db.ref('rooms/test/keyCard').once('value'), action.keyCard]))
         .then(([snapshot, keyCard]) => expect(snapshot.val()).toEqual(keyCard))
       ));
-      it('creates SET_KEYCARD once board has been created', () => (
+      it('creates SET_KEYCARD and SET_CURRENT_TEAM once keys have been created', () => (
         store.dispatch(createKeyCard())
-        .then(action => expect(action.type).toEqual('SET_KEYCARD'))
+        .then(() => {
+          const expectedActionTypes = ['SET_KEYCARD', 'SET_CURRENT_TEAM'];
+          const actualActionTypes = store.getActions().map(action => action.type);
+          expect(actualActionTypes).toContain(...expectedActionTypes);
+        })
       ));
     });
   });
