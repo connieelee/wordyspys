@@ -10,29 +10,35 @@ import {
   createRoom,
   createBoard,
   createSpymasters,
+  listenOnSpymasters,
   deleteRoom,
 } from '../../reducers/actionCreators';
 
 const mapState = null;
 const mapDispatch = dispatch => ({
-  setup: () => {
+  setup: () => (
     dispatch(createRoom())
     .then(() => {
       dispatch(createBoard());
       dispatch(createSpymasters());
-    });
-  },
+    })
+  ),
   disconnect: () => dispatch(deleteRoom()),
+  listenOnSpymasters: () => dispatch(listenOnSpymasters()),
 });
 
 class LocalGame extends React.Component {
   componentDidMount() {
-    this.props.setup();
+    this.props.setup()
+    .then(() => {
+      this.stopListening = this.props.listenOnSpymasters();
+    });
     window.addEventListener('beforeunload', this.props.disconnect);
   }
 
   componentWillUnmount() {
     this.props.disconnect();
+    if (this.stopListening) this.stopListening();
     window.removeEventListener('beforeunload', this.props.disconnect);
   }
 
@@ -53,6 +59,7 @@ class LocalGame extends React.Component {
 
 LocalGame.propTypes = {
   setup: PropTypes.func.isRequired,
+  listenOnSpymasters: PropTypes.func.isRequired,
   disconnect: PropTypes.func.isRequired,
 };
 
