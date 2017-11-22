@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 const mapState = state => ({
-  teamColor: state.spymasters.ownTeam,
+  ownTeam: state.spymasters.ownTeam,
 });
 const mapDispatch = null;
 
-const KeyCardView = ({ teamColor }) => (
-  <div>you are on the {teamColor} team!</div>
+const KeyCardView = ({ ownTeam }) => (
+  <div>you are on the {ownTeam} team!</div>
 );
 
 KeyCardView.propTypes = {
-  teamColor: PropTypes.string.isRequired,
+  ownTeam: PropTypes.string.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(KeyCardView);

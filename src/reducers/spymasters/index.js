@@ -9,7 +9,7 @@ const setMasterTeam = color => ({ type: SET_MASTER_TEAM, color });
 const markMasterTaken = (color, bool) => ({ type: MARK_MASTER_TAKEN, color, bool });
 
 // thunks
-export const createSpymasters = () => (dispatch, getState) => {
+export const createSpymasters = () => (dispatch, getState) => (
   db.ref(`rooms/${getState().roomCode.value}/spymasters`).set({
     RED: false,
     BLUE: false,
@@ -17,25 +17,23 @@ export const createSpymasters = () => (dispatch, getState) => {
   .then(() => {
     dispatch(markMasterTaken('RED', false));
     dispatch(markMasterTaken('BLUE', false));
-  });
-};
+  })
+);
 export const listenOnSpymasters = () => (dispatch, getState) => {
   const listener = snapshot => {
     if (!snapshot) return;
-    const { RED, BLUE } = snapshot.val();
-    dispatch(markMasterTaken('RED', RED));
-    dispatch(markMasterTaken('BLUE', BLUE));
+    const { RED: newRed, BLUE: newBlue } = snapshot.val();
+    const { RED: prevRed, BLUE: prevBlue } = getState().spymasters.taken;
+    if (newRed !== prevRed) dispatch(markMasterTaken('RED', newRed));
+    if (newBlue !== prevBlue) dispatch(markMasterTaken('BLUE', newBlue));
   };
   db.ref(`rooms/${getState().roomCode.value}/spymasters`).on('value', listener);
   return listener;
 };
-export const claimMaster = color => (dispatch, getState) => {
-  db.ref(`rooms/${getState().roomCode.value}/spymasters`).child(color).set(true)
-  .then(() => {
-    dispatch(markMasterTaken(color, true));
-    dispatch(setMasterTeam(color));
-  });
-};
+export const claimMaster = color => (dispatch, getState) => (
+  db.ref(`rooms/${getState().roomCode.value}/spymasters/${color}`).set(true)
+  .then(() => dispatch(setMasterTeam(color)))
+);
 
 // reducer
 const initialState = {

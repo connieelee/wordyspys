@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
@@ -10,10 +10,21 @@ import {
   KeyCardView,
 } from '../organisms';
 
-const mapState = null;
-const mapDispatch = null;
+import { claimMaster } from '../../reducers/actionCreators';
+
+const mapState = state => ({
+  roomCode: state.roomCode,
+});
+const mapDispatch = dispatch => ({
+  claimMaster: color => dispatch(claimMaster(color)),
+});
 
 class SpyMasters extends React.Component {
+  constructor() {
+    super();
+    this.renderWithRedirect = this.renderWithRedirect.bind(this);
+  }
+
   componentDidMount() {
     // set up listener for room disconnecting
     // set up handler for spymaster refreshing
@@ -21,6 +32,13 @@ class SpyMasters extends React.Component {
 
   componentWillUnmount() {
     // update db if a spymaster leaves
+  }
+
+  renderWithRedirect(Component) {
+    return props => {
+      if (!this.props.roomCode.value) return <Redirect to="/masters" />;
+      return <Component {...props} />;
+    };
   }
 
   render() {
@@ -35,8 +53,8 @@ class SpyMasters extends React.Component {
           <Typography type="headline">Welcome, Spy Master</Typography>
           <Switch>
             <Route exact path="/masters" component={RoomCodeForm} />
-            <Route path="/masters/team" component={TeamPicker} />
-            <Route path="/masters/key" component={KeyCardView} />
+            <Route path="/masters/team" render={this.renderWithRedirect(TeamPicker)} />
+            <Route path="/masters/key" render={this.renderWithRedirect(KeyCardView)} />
           </Switch>
         </Grid>
       </Grid>
