@@ -25,13 +25,7 @@ const CurrentAction = ({ roomCode, redTaken, blueTaken }) => (
       <Typography component="p">
         To access the key card, visit wordyspys.firebaseapp.com/masters
         on a mobile device and enter the code
-        <span
-          style={{
-            fontFamily: 'monospace',
-            fontSize: '1.5rem',
-            padding: '0 0.5rem',
-          }}
-        >{roomCode.value}</span>
+        <span className="code">{roomCode.value}</span>
       </Typography>
       {!redTaken && <Typography component="p">waiting on red team master</Typography>}
       {!blueTaken && <Typography component="p">waiting on blue team master</Typography>}

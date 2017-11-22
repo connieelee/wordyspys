@@ -23,5 +23,12 @@
 }
 
 .code {
-  font-family: monospace;
+  font-family: 'monospace';
+  font-size: '1.5rem';
+  padding: '0 0.5rem';
+}
+
+.key-card {
+  height: 3rem;
+  width: 3rem;
 }
