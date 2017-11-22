@@ -9,15 +9,19 @@ import { Board, CurrentAction } from '../organisms';
 import {
   createRoom,
   createBoard,
+  createSpymasters,
   deleteRoom,
 } from '../../reducers/actionCreators';
 
 const mapState = null;
 const mapDispatch = dispatch => ({
-  setup: () => (
+  setup: () => {
     dispatch(createRoom())
-    .then(() => dispatch(createBoard()))
-  ),
+    .then(() => {
+      dispatch(createBoard());
+      dispatch(createSpymasters());
+    });
+  },
   disconnect: () => dispatch(deleteRoom()),
 });
 

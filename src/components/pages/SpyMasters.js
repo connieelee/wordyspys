@@ -4,13 +4,16 @@ import { Switch, Route } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import RoomCodeForm from '../organisms/RoomCodeForm';
-import TeamPicker from '../organisms/TeamPicker';
+import {
+  RoomCodeForm,
+  TeamPicker,
+  KeyCardView,
+} from '../organisms';
 
 const mapState = null;
 const mapDispatch = null;
 
-class SpyMastersJoin extends React.Component {
+class SpyMasters extends React.Component {
   componentDidMount() {
     // set up listener for room disconnecting
     // set up handler for spymaster refreshing
@@ -33,6 +36,7 @@ class SpyMastersJoin extends React.Component {
           <Switch>
             <Route exact path="/masters" component={RoomCodeForm} />
             <Route path="/masters/team" component={TeamPicker} />
+            <Route path="/masters/key" component={KeyCardView} />
           </Switch>
         </Grid>
       </Grid>
@@ -40,4 +44,4 @@ class SpyMastersJoin extends React.Component {
   }
 }
 
-export default connect(mapState, mapDispatch)(SpyMastersJoin);
+export default connect(mapState, mapDispatch)(SpyMasters);
