@@ -9,7 +9,7 @@ const RESET_ERRORS = 'RESET_ERRORS';
 
 // actions
 export const setCode = code => ({ type: SET_CODE, code });
-export const unsetCode = () => ({ type: UNSET_CODE });
+const unsetCode = () => ({ type: UNSET_CODE });
 const addError = error => ({ type: ADD_ERROR, error });
 const resetErrors = () => ({ type: RESET_ERRORS });
 

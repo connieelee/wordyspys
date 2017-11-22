@@ -9,14 +9,21 @@ import Button from 'material-ui/Button';
 import SendIcon from 'material-ui-icons/Send';
 import Typography from 'material-ui/Typography';
 
-import { validateCode, setCode } from '../../reducers/actionCreators';
+import {
+  validateCode,
+  setCode,
+  readKeyCard,
+} from '../../reducers/actionCreators';
 
 const mapState = state => ({
   errors: state.roomCode.errors,
 });
 const mapDispatch = dispatch => ({
   validateCode: code => dispatch(validateCode(code)),
-  setCode: code => dispatch(setCode(code)),
+  populateState: code => {
+    dispatch(setCode(code));
+    return dispatch(readKeyCard());
+  },
 });
 
 class RoomCodeForm extends React.Component {
@@ -40,7 +47,7 @@ class RoomCodeForm extends React.Component {
     this.props.validateCode(code)
     .then(error => {
       if (!error) {
-        this.props.setCode(code);
+        this.props.populateState(code);
         this.props.history.push('/masters/team');
       }
     });
@@ -85,7 +92,7 @@ class RoomCodeForm extends React.Component {
 
 RoomCodeForm.propTypes = {
   validateCode: PropTypes.func.isRequired,
-  setCode: PropTypes.func.isRequired,
+  populateState: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
   errors: PropTypes.arrayOf(PropTypes.string),
 };

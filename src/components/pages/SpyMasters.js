@@ -51,12 +51,17 @@ class SpyMasters extends React.Component {
     return (
       <Grid
         container
-        direction="column"
         alignItems="center"
         justify="center"
         className="full-height"
       >
-        <Grid item container justify="center">
+        <Grid
+          item
+          container
+          direction="column"
+          alignItems="center"
+          justify="center"
+        >
           <Typography type="headline">Welcome, Spy Master</Typography>
           <Switch>
             <Route exact path="/masters" component={RoomCodeForm} />
