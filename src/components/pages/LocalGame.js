@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import { Board, CurrentAction } from '../organisms';
+import { Board, SpyMastersStatus, CurrentMove } from '../organisms';
 
 import {
   createRoom,
@@ -50,7 +50,8 @@ class LocalGame extends React.Component {
           <Typography type="display3" align="right">WORDYSPYS</Typography>
         </Grid>
         <Grid item lg={4}>
-          <CurrentAction />
+          <SpyMastersStatus />
+          <CurrentMove />
         </Grid>
       </Grid>
     );

@@ -1,5 +1,6 @@
 export { default as Board } from './Board';
-export { default as CurrentAction } from './CurrentAction';
+export { default as SpyMastersStatus } from './SpyMastersStatus';
 export { default as RoomCodeForm } from './RoomCodeForm';
 export { default as TeamPicker } from './TeamPicker';
 export { default as GiveClueForm } from './GiveClueForm';
+export { default as CurrentMove } from './CurrentMove';

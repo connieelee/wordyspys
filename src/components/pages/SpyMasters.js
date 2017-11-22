@@ -62,7 +62,7 @@ class SpyMasters extends React.Component {
           alignItems="center"
           justify="center"
         >
-          <Typography type="headline">Welcome, Spy Master</Typography>
+          <Typography type="headline">HEY, SPY MASTER!</Typography>
           <Switch>
             <Route path="/masters/team" render={this.renderWithRedirect(TeamPicker)} />
             <Route path="/masters/key" render={this.renderWithRedirect(KeyCardView)} />
