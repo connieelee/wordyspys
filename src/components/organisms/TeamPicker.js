@@ -67,6 +67,8 @@ class TeamPicker extends React.Component {
 TeamPicker.propTypes = {
   listenForUpdates: PropTypes.func.isRequired,
   claimMaster: PropTypes.func.isRequired,
+  redTaken: PropTypes.bool.isRequired,
+  blueTaken: PropTypes.bool.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };
 TeamPicker.defaultProps = {

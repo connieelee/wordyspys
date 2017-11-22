@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
@@ -61,5 +62,11 @@ class SpyMasters extends React.Component {
     );
   }
 }
+
+SpyMasters.propTypes = {
+  roomCode: PropTypes.shape({
+    value: PropTypes.arrayOf(PropTypes.strings),
+  }).isRequired,
+};
 
 export default connect(mapState, mapDispatch)(SpyMasters);
