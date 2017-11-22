@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
 import Card from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
+import { GiveClueForm } from '../organisms';
 
 const mapState = state => ({
   ownTeam: state.spymasters.ownTeam,
@@ -33,6 +34,7 @@ const KeyCardView = ({ ownTeam, startingTeam, keys }) => (
         })}
       </Grid>
     ))}
+    <GiveClueForm />
   </div>
 );
 

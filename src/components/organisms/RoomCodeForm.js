@@ -66,12 +66,10 @@ class RoomCodeForm extends React.Component {
                 label="Room Code (required)"
                 margin="normal"
               />
-            </Grid>
-            {!!this.props.errors.length && this.props.errors.map(err => (
-              <Grid item key="err">
+              {!!this.props.errors.length && this.props.errors.map(err => (
                 <Typography color="accent">{err}</Typography>
-              </Grid>
-            ))}
+              ))}
+            </Grid>
             <Grid item>
               <Button
                 raised

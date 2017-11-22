@@ -5,10 +5,10 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
+import { KeyCardView } from './';
 import {
-  RoomCodeForm,
   TeamPicker,
-  KeyCardView,
+  RoomCodeForm,
 } from '../organisms';
 
 import {
@@ -64,9 +64,9 @@ class SpyMasters extends React.Component {
         >
           <Typography type="headline">Welcome, Spy Master</Typography>
           <Switch>
-            <Route exact path="/masters" component={RoomCodeForm} />
             <Route path="/masters/team" render={this.renderWithRedirect(TeamPicker)} />
             <Route path="/masters/key" render={this.renderWithRedirect(KeyCardView)} />
+            <Route path="/masters" component={RoomCodeForm} />
           </Switch>
         </Grid>
       </Grid>
