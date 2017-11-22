@@ -25,9 +25,9 @@ export const listenOnCurrentMove = () => (dispatch, getState) => {
     if (!snapshot.val()) return;
     const { team: newTeam, clue: newClue, number: newNumber } = snapshot.val();
     const { team: prevTeam, clue: prevClue, number: prevNumber } = getState().currentMove;
-    if (newTeam !== prevTeam) dispatch(setCurrentTeam(newTeam));
-    if (newClue !== prevClue) dispatch(setCurrentClue(newClue));
-    if (newNumber !== prevNumber) dispatch(setCurrentNumber(newNumber));
+    if (newTeam && (newTeam !== prevTeam)) dispatch(setCurrentTeam(newTeam));
+    if (newClue && (newClue !== prevClue)) dispatch(setCurrentClue(newClue));
+    if (newNumber && (newNumber !== prevNumber)) dispatch(setCurrentNumber(newNumber));
   };
   db.ref(`rooms/${getState().roomCode.value}/currentMove`).on('value', listener);
   return listener;
