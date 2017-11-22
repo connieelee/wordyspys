@@ -11,13 +11,17 @@ import {
   KeyCardView,
 } from '../organisms';
 
-import { claimMaster } from '../../reducers/actionCreators';
+import {
+  claimMaster,
+  disconnectMaster,
+} from '../../reducers/actionCreators';
 
 const mapState = state => ({
   roomCode: state.roomCode,
 });
 const mapDispatch = dispatch => ({
   claimMaster: color => dispatch(claimMaster(color)),
+  disconnect: () => dispatch(disconnectMaster()),
 });
 
 class SpyMasters extends React.Component {
@@ -27,12 +31,13 @@ class SpyMasters extends React.Component {
   }
 
   componentDidMount() {
-    // set up listener for room disconnecting
-    // set up handler for spymaster refreshing
+    // TODO: set up listener for room disconnecting
+    window.addEventListener('beforeunload', this.props.disconnect);
   }
 
   componentWillUnmount() {
-    // update db if a spymaster leaves
+    this.props.disconnect();
+    window.removeEventListener('beforeunload', this.props.disconnect);
   }
 
   renderWithRedirect(Component) {
@@ -46,6 +51,7 @@ class SpyMasters extends React.Component {
     return (
       <Grid
         container
+        direction="column"
         alignItems="center"
         justify="center"
         className="full-height"
@@ -65,8 +71,10 @@ class SpyMasters extends React.Component {
 
 SpyMasters.propTypes = {
   roomCode: PropTypes.shape({
-    value: PropTypes.arrayOf(PropTypes.strings),
+    value: PropTypes.string,
+    error: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
+  disconnect: PropTypes.func.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(SpyMasters);

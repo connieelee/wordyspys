@@ -2,10 +2,12 @@ import db from '../../firebase/db';
 
 // constants
 const SET_MASTER_TEAM = 'SET_MASTER_TEAM';
+const UNSET_MASTER_TEAM = 'UNSET_MASTER_TEAM';
 const MARK_MASTER_TAKEN = 'MARK_MASTER_TAKEN';
 
 // actions
 const setMasterTeam = color => ({ type: SET_MASTER_TEAM, color });
+const unsetMasterTeam = color => ({ type: UNSET_MASTER_TEAM, color });
 const markMasterTaken = (color, bool) => ({ type: MARK_MASTER_TAKEN, color, bool });
 
 // thunks
@@ -34,6 +36,13 @@ export const claimMaster = color => (dispatch, getState) => (
   db.ref(`rooms/${getState().roomCode.value}/spymasters/${color}`).set(true)
   .then(() => dispatch(setMasterTeam(color)))
 );
+export const disconnectMaster = () => (dispatch, getState) => {
+  const ownTeam = getState().spymasters.ownTeam;
+  const code = getState().roomCode.value;
+  if (!ownTeam) return null;
+  return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false)
+  .then(() => dispatch(unsetMasterTeam()));
+};
 
 // reducer
 const initialState = {
@@ -52,6 +61,9 @@ export default function (prevState = initialState, action) {
       return nextState;
     case SET_MASTER_TEAM:
       nextState.ownTeam = action.color;
+      return nextState;
+    case UNSET_MASTER_TEAM:
+      nextState.ownTeam = '';
       return nextState;
     default:
       return prevState;
