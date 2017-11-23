@@ -38,8 +38,7 @@ class KeyCardView extends React.Component {
           <Grid container>
             {row.map(key => {
               let color;
-              if (key === 'RED') color = 'red';
-              else if (key === 'BLUE') color = 'blue';
+              if (key === 'RED' || key === 'BLUE') color = key.toLowerCase();
               else if (key === 'ASSASSIN') color = 'black';
               else color = 'lightgrey';
               return (

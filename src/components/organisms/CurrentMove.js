@@ -19,10 +19,13 @@ const CurrentMove = ({ team, clue, number }) => (
       <div>
         <Typography component="p">TEAM: {team}</Typography>
         {(clue && number) ?
-          <Typography component="p">
-            CLUE: <span className="code">{clue}</span> for <span className="code">{number}</span>
-          </Typography> :
-          <Typography>WAITING ON SPYMASTER</Typography>}
+          <div>
+            <Typography component="p">
+              CLUE: <span className="code">{clue}</span> for <span className="code">{number}</span>
+            </Typography>
+            <Typography component="p">Click on words to make guesses</Typography>
+          </div> :
+          <Typography component="p">WAITING ON SPYMASTER</Typography>}
       </div>
     </CardContent>
   </Card>
