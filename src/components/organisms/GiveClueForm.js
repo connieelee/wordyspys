@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
@@ -9,9 +8,11 @@ import Button from 'material-ui/Button';
 import SendIcon from 'material-ui-icons/Send';
 import Typography from 'material-ui/Typography';
 
-const mapState = state => ({
-});
+import { giveClue } from '../../reducers/actionCreators';
+
+const mapState = null;
 const mapDispatch = dispatch => ({
+  giveClue: (clue, number) => dispatch(giveClue(clue, number)),
 });
 
 class GiveClueForm extends React.Component {
@@ -19,7 +20,7 @@ class GiveClueForm extends React.Component {
     super(props);
     this.state = {
       clue: { value: '', isValid: false, errors: [] },
-      num: { value: null, isValue: false, errors: [] },
+      number: { value: null, isValue: false, errors: [] },
     };
     this.updateInputValue = this.updateInputValue.bind(this);
     this.submit = this.submit.bind(this);
@@ -33,7 +34,7 @@ class GiveClueForm extends React.Component {
       isValid = /^[a-zA-Z]+$/.test(value);
       if (!isValid) errors.push('Clue must be one word with only alphabet characters');
     }
-    if (field === 'num') {
+    if (field === 'number') {
       isValid = /^\d+$/.test(value);
       if (!isValid) errors.push('Number must be a positive integer');
     }
@@ -48,8 +49,7 @@ class GiveClueForm extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    console.log('clue', this.state.clue.value);
-    console.log('num', this.state.num.value);
+    this.props.giveClue(this.state.clue.value, this.state.number.value);
   }
 
   render() {
@@ -76,12 +76,12 @@ class GiveClueForm extends React.Component {
               <TextField
                 required
                 type="number"
-                name="num"
+                name="number"
                 onChange={this.updateInputValue}
                 label="Number (required)"
                 margin="normal"
               />
-              {!!this.state.num.errors.length && this.state.num.errors.map(err => (
+              {!!this.state.number.errors.length && this.state.number.errors.map(err => (
                 <Grid item key="err">
                   <Typography color="accent">{err}</Typography>
                 </Grid>
@@ -92,7 +92,7 @@ class GiveClueForm extends React.Component {
                 raised
                 type="submit"
                 color="primary"
-                disabled={!this.state.clue.isValid || !this.state.num.isValid}
+                disabled={!this.state.clue.isValid || !this.state.number.isValid}
               >
                 Submit
                 <SendIcon />
@@ -106,8 +106,7 @@ class GiveClueForm extends React.Component {
 }
 
 GiveClueForm.propTypes = {
-};
-GiveClueForm.defaultProps = {
+  giveClue: PropTypes.func.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(GiveClueForm);

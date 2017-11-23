@@ -33,6 +33,15 @@ export const listenOnCurrentMove = () => (dispatch, getState) => {
   ref.on('value', listener);
   return () => ref.off('value', listener);
 };
+export const giveClue = (clue, number) => (dispatch, getState) => {
+  const moveRef = db.ref(`rooms/${getState().roomCode.value}/currentMove`);
+  moveRef.child('clue').set(clue)
+  .then(() => moveRef.child('number').set(number))
+  .then(() => {
+    dispatch(setCurrentClue(clue));
+    dispatch(setCurrentNumber(number));
+  });
+};
 
 // reducer
 const initialState = {
