@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import { Board, SpyMastersStatus, CurrentMove } from '../organisms';
+import { Board, SpyMastersStatus, CurrentTurn } from '../organisms';
 
 import {
   createRoom,
   createBoard,
   createSpymasters,
   listenOnSpymasters,
-  listenOnCurrentMove,
+  listenOnCurrentTurn,
   deleteRoom,
 } from '../../reducers/actionCreators';
 
@@ -26,7 +26,7 @@ const mapDispatch = dispatch => ({
   ),
   disconnect: () => dispatch(deleteRoom()),
   listenOnSpymasters: () => dispatch(listenOnSpymasters()),
-  listenOnCurrentMove: () => dispatch(listenOnCurrentMove()),
+  listenOnCurrentTurn: () => dispatch(listenOnCurrentTurn()),
 });
 
 class LocalGame extends React.Component {
@@ -35,7 +35,7 @@ class LocalGame extends React.Component {
     .then(() => {
       const unsubscribes = [];
       unsubscribes.push(this.props.listenOnSpymasters());
-      unsubscribes.push(this.props.listenOnCurrentMove());
+      unsubscribes.push(this.props.listenOnCurrentTurn());
       this.stopListeners = unsubscribes.forEach(func => () => func());
     });
     window.addEventListener('beforeunload', this.props.disconnect);
@@ -56,7 +56,7 @@ class LocalGame extends React.Component {
         </Grid>
         <Grid item lg={4}>
           <SpyMastersStatus />
-          <CurrentMove />
+          <CurrentTurn />
         </Grid>
       </Grid>
     );
@@ -66,7 +66,7 @@ class LocalGame extends React.Component {
 LocalGame.propTypes = {
   setup: PropTypes.func.isRequired,
   listenOnSpymasters: PropTypes.func.isRequired,
-  listenOnCurrentMove: PropTypes.func.isRequired,
+  listenOnCurrentTurn: PropTypes.func.isRequired,
   disconnect: PropTypes.func.isRequired,
 };
 

@@ -12,7 +12,9 @@ const mapState = state => ({
   board: state.board,
 });
 const mapDispatch = dispatch => ({
-  selectCard: (rowId, colId) => dispatch(revealCard(rowId, colId)),
+  selectCard: (rowId, colId) => {
+    dispatch(revealCard(rowId, colId));
+  },
 });
 
 const Board = ({ board, selectCard }) => (

@@ -25,9 +25,10 @@ export const createBoard = () => (dispatch, getState) => {
   .then(() => dispatch(setBoard(board)));
 };
 export const revealCard = (rowId, colId) => (dispatch, getState) => (
-  db.ref(`rooms/${getState().roomCode.value}/keyCard/keys/${rowId}/${colId}`)
-  .once('value')
+  db.ref(`rooms/${getState().roomCode.value}/keyCard/keys`)
+  .child(rowId).child(colId).once('value')
   .then(snapshot => {
+    if (!snapshot) return;
     dispatch(setCardStatus(rowId, colId, snapshot.val()));
   })
 );
@@ -39,11 +40,13 @@ export default function (prevState = initialState, action) {
   switch (action.type) {
     case SET_BOARD:
       return action.board;
-    case SET_CARD_STATUS:
-      nextState[action.rowId] = [...nextState[action.rowId]];
-      nextState[action.rowId][action.colId] = Object.assign({}, nextState[action.rowId][action.colId]);
-      nextState[action.rowId][action.colId].status = action.status;
+    case SET_CARD_STATUS: {
+      const { rowId, colId, status } = action;
+      nextState[rowId] = [...nextState[rowId]];
+      nextState[rowId][colId] = Object.assign({}, nextState[rowId][colId]);
+      nextState[rowId][colId].status = status;
       return nextState;
+    }
     default:
       return prevState;
   }

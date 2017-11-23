@@ -11,21 +11,21 @@ const setCurrentClue = clue => ({ type: SET_CURRENT_CLUE, clue });
 const setCurrentNumber = number => ({ type: SET_CURRENT_NUMBER, number });
 
 // thunks
-export const createMove = (team, clue, number) => (dispatch, getState) => (
-  db.ref(`rooms/${getState().roomCode.value}/currentMove/team`).set(team)
+export const createTurn = (team, clue, number) => (dispatch, getState) => (
+  db.ref(`rooms/${getState().roomCode.value}/currentTurn/team`).set(team)
   .then(() => {
     dispatch(setCurrentTeam(team));
     if (clue) dispatch(setCurrentClue(clue));
     if (number) dispatch(setCurrentNumber(number));
   })
 );
-export const listenOnCurrentMove = () => (dispatch, getState) => {
-  const ref = db.ref(`rooms/${getState().roomCode.value}/currentMove`);
+export const listenOnCurrentTurn = () => (dispatch, getState) => {
+  const ref = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
   const listener = snapshot => {
     if (!snapshot) return;
     if (!snapshot.val()) return;
     const { team: newTeam, clue: newClue, number: newNumber } = snapshot.val();
-    const { team: prevTeam, clue: prevClue, number: prevNumber } = getState().currentMove;
+    const { team: prevTeam, clue: prevClue, number: prevNumber } = getState().currentTurn;
     if (newTeam && (newTeam !== prevTeam)) dispatch(setCurrentTeam(newTeam));
     if (newClue && (newClue !== prevClue)) dispatch(setCurrentClue(newClue));
     if (newNumber && (newNumber !== prevNumber)) dispatch(setCurrentNumber(newNumber));
@@ -34,7 +34,7 @@ export const listenOnCurrentMove = () => (dispatch, getState) => {
   return () => ref.off('value', listener);
 };
 export const giveClue = (clue, number) => (dispatch, getState) => {
-  const moveRef = db.ref(`rooms/${getState().roomCode.value}/currentMove`);
+  const moveRef = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
   moveRef.child('clue').set(clue)
   .then(() => moveRef.child('number').set(number))
   .then(() => {

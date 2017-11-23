@@ -7,21 +7,21 @@ import Card from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import { GiveClueForm } from '../organisms';
 
-import { listenOnCurrentMove } from '../../reducers/actionCreators';
+import { listenOnCurrentTurn } from '../../reducers/actionCreators';
 
 const mapState = state => ({
   ownTeam: state.spymasters.ownTeam,
-  currentTeam: state.currentMove.team,
+  currentTeam: state.currentTurn.team,
   startingTeam: state.keyCard.startingTeam,
   keys: state.keyCard.keys,
 });
 const mapDispatch = dispatch => ({
-  listenOnCurrentMove: () => dispatch(listenOnCurrentMove()),
+  listenOnCurrentTurn: () => dispatch(listenOnCurrentTurn()),
 });
 
 class KeyCardView extends React.Component {
   componentDidMount() {
-    this.stopListening = this.props.listenOnCurrentMove();
+    this.stopListening = this.props.listenOnCurrentTurn();
   }
 
   componentWillUnmount() {
@@ -60,7 +60,7 @@ KeyCardView.propTypes = {
   currentTeam: PropTypes.string.isRequired,
   startingTeam: PropTypes.string.isRequired,
   keys: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  listenOnCurrentMove: PropTypes.func.isRequired,
+  listenOnCurrentTurn: PropTypes.func.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(KeyCardView);
