@@ -3,4 +3,11 @@ export default {
     value: 'test',
     errors: [],
   },
+  spymasters: {
+    ownTeam: '',
+    taken: {
+      RED: false,
+      BLUE: false,
+    },
+  },
 };
