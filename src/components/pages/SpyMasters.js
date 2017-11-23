@@ -39,7 +39,6 @@ class SpyMasters extends React.Component {
 
   componentWillUnmount() {
     this.props.disconnect();
-    window.removeEventListener('beforeunload', this.props.disconnect);
   }
 
   attachRoomListener() {

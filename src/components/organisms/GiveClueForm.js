@@ -49,7 +49,7 @@ class GiveClueForm extends React.Component {
 
   submit(e) {
     e.preventDefault();
-    this.props.giveClue(this.state.clue.value, this.state.number.value);
+    this.props.giveClue(this.state.clue.value, +this.state.number.value);
   }
 
   render() {

@@ -9,10 +9,11 @@ const mapState = state => ({
   team: state.currentTurn.team,
   clue: state.currentTurn.clue,
   number: state.currentTurn.number,
+  turnIsOver: state.currentTurn.isOver,
 });
 const mapDispatch = null;
 
-const CurrentTurn = ({ team, clue, number }) => (
+const CurrentTurn = ({ team, clue, number, turnIsOver }) => (
   <Card>
     <CardContent>
       <Typography type="headline" component="h2">CURRENT TURN</Typography>
@@ -23,9 +24,10 @@ const CurrentTurn = ({ team, clue, number }) => (
             <Typography component="p">
               CLUE: <span className="code">{clue}</span> for <span className="code">{number}</span>
             </Typography>
-            <Typography component="p">Click on words to make guesses</Typography>
+            <Typography component="p">Click words to guess</Typography>
           </div> :
           <Typography component="p">WAITING ON SPYMASTER</Typography>}
+        {turnIsOver && <Typography type="headline">YOUR TURN IS OVER</Typography>}
       </div>
     </CardContent>
   </Card>
@@ -34,7 +36,8 @@ const CurrentTurn = ({ team, clue, number }) => (
 CurrentTurn.propTypes = {
   team: PropTypes.string.isRequired,
   clue: PropTypes.string,
-  number: PropTypes.string,
+  number: PropTypes.number,
+  turnIsOver: PropTypes.bool.isRequired,
 };
 CurrentTurn.defaultProps = {
   clue: null,

@@ -6,13 +6,14 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Card from 'material-ui/Card';
 
-import { revealCard } from '../../reducers/actionCreators';
+import { addGuess, revealCard } from '../../reducers/actionCreators';
 
 const mapState = state => ({
   board: state.board,
 });
 const mapDispatch = dispatch => ({
-  selectCard: (rowId, colId) => {
+  selectCard: (word, rowId, colId) => {
+    dispatch(addGuess(word));
     dispatch(revealCard(rowId, colId));
   },
 });
@@ -30,7 +31,7 @@ const Board = ({ board, selectCard }) => (
           return (
             <Grid key={card.word} item className="cols-5">
               <Card
-                onClick={() => selectCard(rowId, colId)}
+                onClick={() => selectCard(card.word, rowId, colId)}
                 className="word-card"
                 style={{ backgroundColor: color }}
               >

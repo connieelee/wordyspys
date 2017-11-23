@@ -1,5 +1,6 @@
 import { generateBoard } from '../../utils';
 import db from '../../firebase/db';
+import { validateTurn } from '../actionCreators';
 
 // constants
 const SET_BOARD = 'SET_BOARD';
@@ -29,7 +30,9 @@ export const revealCard = (rowId, colId) => (dispatch, getState) => (
   .child(rowId).child(colId).once('value')
   .then(snapshot => {
     if (!snapshot) return;
-    dispatch(setCardStatus(rowId, colId, snapshot.val()));
+    const selectedCardKey = snapshot.val();
+    dispatch(validateTurn(selectedCardKey));
+    dispatch(setCardStatus(rowId, colId, selectedCardKey));
   })
 );
 

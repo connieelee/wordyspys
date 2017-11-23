@@ -25,7 +25,7 @@ describe('Key Card Reducer', () => {
       return db.ref('rooms/test').set({ roomCode: 'test' });
     });
 
-    describe('createKeyCard', () => {
+    describe.only('createKeyCard', () => {
       it('updates the db with newly created keyCard', () => (
         store.dispatch(createKeyCard())
         .then(action => Promise.all([db.ref('rooms/test/keyCard').once('value'), action.keyCard]))
