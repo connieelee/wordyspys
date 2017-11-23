@@ -14,6 +14,8 @@ const mapState = state => ({
   currentTeam: state.currentTurn.team,
   startingTeam: state.keyCard.startingTeam,
   keys: state.keyCard.keys,
+  clue: state.currentTurn.clue,
+  number: state.currentTurn.number,
 });
 const mapDispatch = dispatch => ({
   listenOnCurrentTurn: () => dispatch(listenOnCurrentTurn()),
@@ -29,11 +31,10 @@ class KeyCardView extends React.Component {
   }
 
   render() {
-    const { ownTeam, currentTeam, startingTeam, keys } = this.props;
+    const { ownTeam, currentTeam, startingTeam, keys, clue, number } = this.props;
     return (
       <div>
-        <Typography align="center">you are on the {ownTeam} team!</Typography>
-        <Typography align="center">the starting team is {startingTeam}!</Typography>
+        <Typography align="center">YOUR TEAM: {ownTeam}</Typography>
         {keys.map(row => (
           <Grid container>
             {row.map(key => {
@@ -49,7 +50,11 @@ class KeyCardView extends React.Component {
             })}
           </Grid>
         ))}
-        {currentTeam === ownTeam ? <GiveClueForm /> : <p>wait for your turn</p>}
+        <Typography align="center">the starting team is {startingTeam}!</Typography>
+        {((currentTeam === ownTeam) && (clue && number)) &&
+        <Typography>YOUR CLUE: {clue} for {number}</Typography>}
+        {((currentTeam === ownTeam) && !(clue && number)) && <GiveClueForm />}
+        {(currentTeam !== ownTeam) && <Typography>wait for your turn</Typography>}
       </div>
     );
   }
