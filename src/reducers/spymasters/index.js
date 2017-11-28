@@ -41,13 +41,15 @@ export const claimMaster = color => (dispatch, getState) => (
 export const disconnectMaster = () => (dispatch, getState) => {
   const ownTeam = getState().spymasters.ownTeam;
   const code = getState().roomCode.value;
+  console.log('ownTeam', ownTeam, 'code', code);
   if (!ownTeam) return null;
-  return db.ref(`rooms/${code}`).once('value')
-  .then(snapshot => {
-    if (!snapshot.val()) return null;
-    return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false);
+  console.log('about to set false at:', `rooms/${code}/spymasters/${ownTeam}`);
+  return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false)
+  .then(() => {
+    console.log('in then');
+    dispatch(unsetMasterTeam());
   })
-  .then(() => dispatch(unsetMasterTeam()));
+  .catch(err => console.error(err));
 };
 
 // reducer
