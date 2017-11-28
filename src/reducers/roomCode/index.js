@@ -21,11 +21,13 @@ export const createRoom = () => dispatch => {
     code = _code;
     return db.ref(`rooms/${code}`).set({ roomCode: code });
   })
-  .then(() => dispatch(setCode(code)));
+  .then(() => dispatch(setCode(code)))
+  .catch(err => console.error(err));
 };
 export const deleteRoom = () => (dispatch, getState) => (
   db.ref(`rooms/${getState().roomCode.value}`).remove()
   .then(() => dispatch(unsetCode()))
+  .catch(err => console.error(err))
 );
 export const validateCode = code => dispatch => {
   dispatch(resetErrors());
@@ -33,7 +35,8 @@ export const validateCode = code => dispatch => {
   .then(snapshot => {
     if (snapshot.val()) return null;
     return dispatch(addError(`Room ${code} does not exist`));
-  });
+  })
+  .catch(err => console.error(err));
 };
 export const onRoomDisconnect = callback => (dispatch, getState) => {
   const ref = db.ref(`rooms/${getState().roomCode.value}/roomCode`);

@@ -23,7 +23,8 @@ export const createBoard = () => (dispatch, getState) => {
     board = _board;
     return db.ref(`rooms/${getState().roomCode.value}/board`).set(board);
   })
-  .then(() => dispatch(setBoard(board)));
+  .then(() => dispatch(setBoard(board)))
+  .catch(err => console.error(err));
 };
 export const revealCard = (rowId, colId) => (dispatch, getState) => (
   db.ref(`rooms/${getState().roomCode.value}/keyCard/keys`)
@@ -34,6 +35,7 @@ export const revealCard = (rowId, colId) => (dispatch, getState) => (
     dispatch(validateTurn(selectedCardKey));
     dispatch(setCardStatus(rowId, colId, selectedCardKey));
   })
+  .catch(err => console.error(err))
 );
 
 // reducer

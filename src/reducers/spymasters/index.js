@@ -20,6 +20,7 @@ export const createSpymasters = () => (dispatch, getState) => (
     dispatch(markMasterTaken('RED', false));
     dispatch(markMasterTaken('BLUE', false));
   })
+  .catch(err => console.error(err))
 );
 export const listenOnSpymasters = () => (dispatch, getState) => {
   const ref = db.ref(`rooms/${getState().roomCode.value}/spymasters`);
@@ -37,18 +38,14 @@ export const listenOnSpymasters = () => (dispatch, getState) => {
 export const claimMaster = color => (dispatch, getState) => (
   db.ref(`rooms/${getState().roomCode.value}/spymasters/${color}`).set(true)
   .then(() => dispatch(setMasterTeam(color)))
+  .catch(err => console.error(err))
 );
 export const disconnectMaster = () => (dispatch, getState) => {
   const ownTeam = getState().spymasters.ownTeam;
   const code = getState().roomCode.value;
-  console.log('ownTeam', ownTeam, 'code', code);
   if (!ownTeam) return null;
-  console.log('about to set false at:', `rooms/${code}/spymasters/${ownTeam}`);
   return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false)
-  .then(() => {
-    console.log('in then');
-    dispatch(unsetMasterTeam());
-  })
+  .then(() => dispatch(unsetMasterTeam()))
   .catch(err => console.error(err));
 };
 

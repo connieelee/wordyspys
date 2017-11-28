@@ -27,6 +27,7 @@ export const createTurn = (team, clue = null, number = null) => (dispatch, getSt
     if (clue) dispatch(setCurrentClue(clue));
     if (number) dispatch(setCurrentNumber(number));
   })
+  .catch(err => console.error(err))
 );
 export const listenOnCurrentTurn = () => (dispatch, getState) => {
   const ref = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
@@ -50,7 +51,8 @@ export const giveClue = (clue, number) => (dispatch, getState) => {
   .then(() => {
     dispatch(setCurrentClue(clue));
     dispatch(setCurrentNumber(number));
-  });
+  })
+  .catch(err => console.error(err));
 };
 export const validateTurn = selectedCardKey => (dispatch, getState) => {
   const { guesses, number, team } = getState().currentTurn;
@@ -59,7 +61,8 @@ export const validateTurn = selectedCardKey => (dispatch, getState) => {
   const notOurs = selectedCardKey !== team;
   if (!(outOfGuesses || notOurs)) return null;
   return db.ref(`rooms/${getState().roomCode.value}/currentTurn/isOver`).set(true)
-  .then(() => dispatch(setTurnOver()));
+  .then(() => dispatch(setTurnOver()))
+  .catch(err => console.error(err));
 };
 
 // reducer
