@@ -13,6 +13,7 @@ import {
 
 import {
   claimMaster,
+  unsetCode,
   disconnectMaster,
   onRoomDisconnect,
 } from '../../reducers/actionCreators';
@@ -22,6 +23,7 @@ const mapState = state => ({
 });
 const mapDispatch = dispatch => ({
   claimMaster: color => dispatch(claimMaster(color)),
+  unsetCode: () => dispatch(unsetCode()),
   disconnect: () => dispatch(disconnectMaster()),
   onRoomDisconnect: callback => dispatch(onRoomDisconnect(callback)),
 });
@@ -44,7 +46,10 @@ class SpyMasters extends React.Component {
   }
 
   attachRoomListener() {
-    this.props.onRoomDisconnect(() => this.props.history.push('/masters'));
+    this.props.onRoomDisconnect(() => {
+      this.props.unsetCode();
+      this.props.history.push('/masters');
+    });
   }
 
   renderWithRedirect(Component) {
@@ -92,6 +97,7 @@ SpyMasters.propTypes = {
     error: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   disconnect: PropTypes.func.isRequired,
+  unsetCode: PropTypes.func.isRequired,
   onRoomDisconnect: PropTypes.func.isRequired,
 };
 

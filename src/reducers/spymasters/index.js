@@ -43,7 +43,7 @@ export const claimMaster = color => (dispatch, getState) => (
 export const disconnectMaster = () => (dispatch, getState) => {
   const ownTeam = getState().spymasters.ownTeam;
   const code = getState().roomCode.value;
-  if (!ownTeam) return null;
+  if (!ownTeam || !code) return null;
   return db.ref(`rooms/${code}/spymasters/${ownTeam}`).set(false)
   .then(() => dispatch(unsetMasterTeam()))
   .catch(err => console.error(err));
