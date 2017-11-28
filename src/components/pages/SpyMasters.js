@@ -22,7 +22,7 @@ const mapState = state => ({
 });
 const mapDispatch = dispatch => ({
   claimMaster: color => dispatch(claimMaster(color)),
-  disconnect: () => { console.log('disconnect'); dispatch(disconnectMaster()); },
+  disconnect: () => dispatch(disconnectMaster()),
   onRoomDisconnect: callback => dispatch(onRoomDisconnect(callback)),
 });
 
@@ -35,13 +35,11 @@ class SpyMasters extends React.Component {
 
   componentDidMount() {
     window.addEventListener('beforeunload', () => {
-      console.log('beforeunload');
       this.props.disconnect();
     });
   }
 
   componentWillUnmount() {
-    console.log('willunmount');
     this.props.disconnect();
   }
 
