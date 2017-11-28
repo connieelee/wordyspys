@@ -9,6 +9,7 @@ import { Board, SpyMastersStatus, CurrentTurn } from '../organisms';
 import {
   createRoom,
   createBoard,
+  createKeyCard,
   createSpymasters,
   listenOnSpymasters,
   listenOnCurrentTurn,
@@ -21,6 +22,7 @@ const mapDispatch = dispatch => ({
     dispatch(createRoom())
     .then(() => {
       dispatch(createBoard());
+      dispatch(createKeyCard());
       dispatch(createSpymasters());
     })
   ),

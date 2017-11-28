@@ -22,7 +22,7 @@ const mapDispatch = dispatch => ({
   validateCode: code => dispatch(validateCode(code)),
   populateState: code => {
     dispatch(setCode(code));
-    return dispatch(readKeyCard());
+    dispatch(readKeyCard());
   },
 });
 

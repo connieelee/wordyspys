@@ -35,11 +35,10 @@ export const listenOnCurrentTurn = () => (dispatch, getState) => {
   const listener = snapshot => {
     if (!snapshot) return;
     if (!snapshot.val()) return;
-    const { team: newTeam, clue: newClue, number: newNumber, isOver } = snapshot.val();
-    const { team: prevTeam, clue: prevClue, number: prevNumber } = getState().currentTurn;
-    if (newTeam && (newTeam !== prevTeam)) dispatch(setCurrentTeam(newTeam));
-    if (newClue && (newClue !== prevClue)) dispatch(setCurrentClue(newClue));
-    if (newNumber && (newNumber !== prevNumber)) dispatch(setCurrentNumber(newNumber));
+    const { team, clue, number, isOver } = snapshot.val();
+    if (team) dispatch(setCurrentTeam(team));
+    if (clue) dispatch(setCurrentClue(clue));
+    if (number) dispatch(setCurrentNumber(number));
     if (isOver) dispatch(setTurnOver());
   };
   ref.on('value', listener);
@@ -71,6 +70,11 @@ export const validateTurn = selectedCardKey => (dispatch, getState) => {
   return db.ref(`rooms/${getState().roomCode.value}/currentTurn/isOver`).set(true)
   .then(() => dispatch(setTurnOver()))
   .catch(err => console.error(err));
+};
+export const endTurn = () => dispatch => {
+  // move currentTurn to pastTurns
+  // change team
+  // reset clue & number & guesses & isOver
 };
 
 // reducer
