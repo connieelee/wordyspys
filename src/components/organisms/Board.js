@@ -6,16 +6,13 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Card from 'material-ui/Card';
 
-import { addGuess, revealCard } from '../../reducers/actionCreators';
+import { makeGuess } from '../../reducers/actionCreators';
 
 const mapState = state => ({
   board: state.board,
 });
 const mapDispatch = dispatch => ({
-  selectCard: (word, rowId, colId) => {
-    dispatch(addGuess(word));
-    dispatch(revealCard(rowId, colId));
-  },
+  selectCard: (word, rowId, colId) => dispatch(makeGuess(word, rowId, colId)),
 });
 
 const Board = ({ board, selectCard }) => (

@@ -1,4 +1,5 @@
 import db from '../../firebase/db';
+import { revealCard } from '../actionCreators';
 
 // constants
 const SET_CURRENT_TEAM = 'SET_CURRENT_TEAM';
@@ -12,7 +13,7 @@ const setCurrentTeam = team => ({ type: SET_CURRENT_TEAM, team });
 const setCurrentClue = clue => ({ type: SET_CURRENT_CLUE, clue });
 const setCurrentNumber = number => ({ type: SET_CURRENT_NUMBER, number });
 const setTurnOver = () => ({ type: SET_TURN_OVER });
-export const addGuess = word => ({ type: ADD_GUESSES, word });
+const addGuess = word => ({ type: ADD_GUESSES, word });
 
 // thunks
 export const createTurn = (team, clue = null, number = null) => (dispatch, getState) => (
@@ -53,6 +54,13 @@ export const giveClue = (clue, number) => (dispatch, getState) => {
     dispatch(setCurrentNumber(number));
   })
   .catch(err => console.error(err));
+};
+export const makeGuess = (word, rowId, colId) => (dispatch, getState) => {
+  const currentTurn = getState().currentTurn;
+  if (currentTurn.clue && currentTurn.number && !currentTurn.isOver) {
+    dispatch(addGuess(word));
+    dispatch(revealCard(rowId, colId));
+  }
 };
 export const validateTurn = selectedCardKey => (dispatch, getState) => {
   const { guesses, number, team } = getState().currentTurn;
