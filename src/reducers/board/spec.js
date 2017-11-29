@@ -46,25 +46,25 @@ describe('Board Reducer', () => {
       const rowId = 0;
       const colId = 0;
       const status = testKeyCard.keys[rowId][colId];
-      const syncActions = [];
-      const thunkActions = [];
+      const dispatchedSyncActions = [];
+      const dispatchedThunks = [];
       beforeAll(() => (
         seedTestRoom({ board: true, keyCard: true })
         .then(() => Thunk(revealCard).withState(mockStoreInitialState).execute(rowId, colId))
         .then(dispatches => {
           dispatches.forEach(dispatch => {
-            if (dispatch.isPlainObject()) syncActions.push(dispatch.getAction());
-            if (dispatch.isFunction()) thunkActions.push(dispatch.getName());
+            if (dispatch.isPlainObject()) dispatchedSyncActions.push(dispatch.getAction());
+            if (dispatch.isFunction()) dispatchedThunks.push(dispatch.getName());
           });
         })
       ));
 
       it('dispatches SET_CARD_STATUS with correct values', () => {
         const expectedSyncActions = [{ type: 'SET_CARD_STATUS', rowId, colId, status }];
-        expect(syncActions).toEqual(expectedSyncActions);
+        expect(dispatchedSyncActions).toEqual(expectedSyncActions);
       });
       it('dispatches `validateTurn` thunk', () => {
-        expect(thunkActions).toEqual(['validateTurnThunk']);
+        expect(dispatchedThunks).toEqual(['validateTurnThunk']);
       });
     });
   });

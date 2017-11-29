@@ -3,10 +3,10 @@ import { generateKeyCard } from '../../utils/game';
 import { createTurn } from '../actionCreators';
 
 // constants
-const SET_KEYCARD = 'SET_KEYCARD';
+const SET_KEY_CARD = 'SET_KEY_CARD';
 
 // actions
-const setKeyCard = keyCard => ({ type: SET_KEYCARD, keyCard });
+const setKeyCard = keyCard => ({ type: SET_KEY_CARD, keyCard });
 
 // thunks
 export const createKeyCard = () => (
@@ -32,7 +32,7 @@ export const readKeyCard = () => (
 const initialState = { keys: [], startingTeam: '' };
 export default function (prevState = initialState, action) {
   switch (action.type) {
-    case SET_KEYCARD:
+    case SET_KEY_CARD:
       return action.keyCard;
     default:
       return prevState;
