@@ -7,6 +7,7 @@ import {
   mockStoreInitialState,
   seedTestRoom,
   testBoard,
+  testKeyCard,
 } from '../../utils/tests';
 
 const mockStore = configureMockStore([thunk]);
@@ -47,9 +48,17 @@ describe('Board Reducer', () => {
     });
 
     describe('revealCard', () => {
+      const rowId = 0;
+      const colId = 0;
+      const status = testKeyCard.keys[rowId][colId];
       beforeEach(() => seedTestRoom({ board: true, keyCard: true }));
-      it('creates SET_CARD_STATUS based on data from keyCard in db');
-      it('dispatches `validateTurn` with the selected card\'s key');
+      it('creates SET_CARD_STATUS based on data from keyCard in db', () => (
+        store.dispatch(revealCard(rowId, colId))
+        .then(() => {
+          const expectedActions = [{ type: 'SET_CARD_STATUS', rowId, colId, status }];
+          expect(store.getActions()).toEqual(expectedActions);
+        })
+      ));
     });
   });
 });
