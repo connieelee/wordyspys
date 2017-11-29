@@ -57,16 +57,19 @@ export const makeGuess = (word, rowId, colId) => (dispatch, getState) => {
     dispatch(revealCard(rowId, colId));
   }
 };
-export const validateTurn = selectedCardKey => (dispatch, getState) => {
-  const { guesses, number, team } = getState().currentTurn;
-  // TODO: teamPassed
-  const outOfGuesses = guesses.length === number + 1;
-  const notOurs = selectedCardKey !== team;
-  if (!(outOfGuesses || notOurs)) return null;
-  return db.ref(`rooms/${getState().roomCode.value}/currentTurn/isOver`).set(true)
-  .then(() => dispatch(setTurnOver(true)))
-  .catch(err => console.error(err));
-};
+export const validateTurn = selectedCardKey => (
+  function validateTurnThunk(dispatch, getState) {
+    const { guesses, number, team } = getState().currentTurn;
+    // TODO: teamPassed
+    const outOfGuesses = guesses.length === number + 1;
+    const notOurs = selectedCardKey !== team;
+    if (!(outOfGuesses || notOurs)) return null;
+    return db.ref(`rooms/${getState().roomCode.value}/currentTurn/isOver`).set(true)
+    .then(() => dispatch(setTurnOver(true)))
+    .catch(err => console.error(err));
+  }
+);
+
 export const endTurn = () => (dispatch, getState) => {
   const { roomCode, currentTurn } = getState();
   const roomRef = db.ref(`rooms/${roomCode.value}`);

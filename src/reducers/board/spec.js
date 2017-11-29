@@ -1,5 +1,4 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { Reducer, Thunk } from 'redux-testkit';
 import db from '../../firebase/db';
 
 import boardReducer, { createBoard, revealCard } from './';
@@ -10,55 +9,63 @@ import {
   testKeyCard,
 } from '../../utils/tests';
 
-const mockStore = configureMockStore([thunk]);
-
 describe('Board Reducer', () => {
   it('should return initial state', () => {
     expect(boardReducer(undefined, {})).toEqual([]);
   });
   it('should handle SET_BOARD', () => {
     const action = { type: 'SET_BOARD', board: testBoard };
-    expect(boardReducer([], action)).toEqual(testBoard);
+    Reducer(boardReducer).expect(action).toReturnState(testBoard);
   });
   it('should handle SET_CARD_STATUS', () => {
-    const rowId = 0;
-    const colId = 0;
-    const status = 'RED';
-    const action = { type: 'SET_CARD_STATUS', rowId, colId, status };
+    const action = { type: 'SET_CARD_STATUS', rowId: 0, colId: 0, status: 'RED' };
     const expectedBoard = [...testBoard];
-    expectedBoard[rowId][colId] = Object.assign({}, testBoard[rowId][colId]);
-    expectedBoard[rowId][colId].status = status;
-    expect(boardReducer(testBoard, action)).toEqual(expectedBoard);
+    expectedBoard[0][0] = Object.assign({}, testBoard[0][0]);
+    expectedBoard[0][0].status = 'RED';
+    Reducer(boardReducer).withState(testBoard).expect(action).toReturnState(expectedBoard);
   });
 
   describe('thunks', () => {
-    let store;
-    beforeEach(() => { store = mockStore(mockStoreInitialState); });
     describe('createBoard', () => {
-      beforeEach(() => seedTestRoom());
+      let dispatches;
+      beforeAll(() => (
+        seedTestRoom()
+        .then(() => Thunk(createBoard).withState(mockStoreInitialState).execute())
+        .then(_dispatches => { dispatches = _dispatches; })
+      ));
       it('updates the db with newly created board', () => (
-        store.dispatch(createBoard())
-        .then(action => Promise.all([db.ref('rooms/test/board').once('value'), action.board]))
-        .then(([snapshot, board]) => expect(snapshot.val()).toEqual(board))
+        db.ref('rooms/test/board').once('value')
+        .then(snapshot => expect(snapshot.val()).toEqual(dispatches[0].getAction().board))
       ));
-      it('creates SET_BOARD once board has been created', () => (
-        store.dispatch(createBoard())
-        .then(action => expect(action.type).toEqual('SET_BOARD'))
-      ));
+      it('dispatches SET_BOARD', () => {
+        expect(dispatches[0].getType()).toEqual('SET_BOARD');
+      });
     });
 
     describe('revealCard', () => {
       const rowId = 0;
       const colId = 0;
       const status = testKeyCard.keys[rowId][colId];
-      beforeEach(() => seedTestRoom({ board: true, keyCard: true }));
-      it('creates SET_CARD_STATUS based on data from keyCard in db', () => (
-        store.dispatch(revealCard(rowId, colId))
-        .then(() => {
-          const expectedActions = [{ type: 'SET_CARD_STATUS', rowId, colId, status }];
-          expect(store.getActions()).toEqual(expectedActions);
+      const syncActions = [];
+      const thunkActions = [];
+      beforeAll(() => (
+        seedTestRoom({ board: true, keyCard: true })
+        .then(() => Thunk(revealCard).withState(mockStoreInitialState).execute(rowId, colId))
+        .then(dispatches => {
+          dispatches.forEach(dispatch => {
+            if (dispatch.isPlainObject()) syncActions.push(dispatch.getAction());
+            if (dispatch.isFunction()) thunkActions.push(dispatch.getName());
+          });
         })
       ));
+
+      it('dispatches SET_CARD_STATUS with correct values', () => {
+        const expectedSyncActions = [{ type: 'SET_CARD_STATUS', rowId, colId, status }];
+        expect(syncActions).toEqual(expectedSyncActions);
+      });
+      it('dispatches `validateTurn` thunk', () => {
+        expect(thunkActions).toEqual(['validateTurnThunk']);
+      });
     });
   });
 });

@@ -13,5 +13,5 @@ export const seedTestRoom = (config = {}) => {
   Object.keys(config).forEach(key => {
     if (config[key]) room[key] = testRoom[key];
   });
-  db.ref('rooms/test').set(room);
+  return db.ref('rooms/test').set(room);
 };
