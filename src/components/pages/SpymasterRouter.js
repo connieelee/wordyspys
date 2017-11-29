@@ -5,7 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import { KeyCardView } from './';
+import { SpymasterMain } from './';
 import {
   TeamPicker,
   RoomCodeForm,
@@ -28,7 +28,7 @@ const mapDispatch = dispatch => ({
   onRoomDisconnect: callback => dispatch(onRoomDisconnect(callback)),
 });
 
-class SpyMasters extends React.Component {
+class SpymasterRouter extends React.Component {
   constructor() {
     super();
     this.renderWithRedirect = this.renderWithRedirect.bind(this);
@@ -77,7 +77,7 @@ class SpyMasters extends React.Component {
           <Typography type="headline">HEY, SPY MASTER!</Typography>
           <Switch>
             <Route path="/masters/team" render={this.renderWithRedirect(TeamPicker)} />
-            <Route path="/masters/key" render={this.renderWithRedirect(KeyCardView)} />
+            <Route path="/masters/key" render={this.renderWithRedirect(SpymasterMain)} />
             <Route
               path="/masters"
               render={props => (
@@ -91,7 +91,7 @@ class SpyMasters extends React.Component {
   }
 }
 
-SpyMasters.propTypes = {
+SpymasterRouter.propTypes = {
   roomCode: PropTypes.shape({
     value: PropTypes.string,
     error: PropTypes.arrayOf(PropTypes.string),
@@ -101,4 +101,4 @@ SpyMasters.propTypes = {
   onRoomDisconnect: PropTypes.func.isRequired,
 };
 
-export default connect(mapState, mapDispatch)(SpyMasters);
+export default connect(mapState, mapDispatch)(SpymasterRouter);

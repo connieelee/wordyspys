@@ -21,7 +21,7 @@ const mapDispatch = dispatch => ({
   listenOnCurrentTurn: () => dispatch(listenOnCurrentTurn()),
 });
 
-class KeyCardView extends React.Component {
+class SpymasterMain extends React.Component {
   componentDidMount() {
     this.stopListening = this.props.listenOnCurrentTurn();
   }
@@ -60,7 +60,7 @@ class KeyCardView extends React.Component {
   }
 }
 
-KeyCardView.propTypes = {
+SpymasterMain.propTypes = {
   ownTeam: PropTypes.string.isRequired,
   currentTeam: PropTypes.string.isRequired,
   startingTeam: PropTypes.string.isRequired,
@@ -68,4 +68,4 @@ KeyCardView.propTypes = {
   listenOnCurrentTurn: PropTypes.func.isRequired,
 };
 
-export default connect(mapState, mapDispatch)(KeyCardView);
+export default connect(mapState, mapDispatch)(SpymasterMain);
