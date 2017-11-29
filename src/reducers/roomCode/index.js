@@ -14,41 +14,49 @@ const addError = error => ({ type: ADD_ERROR, error });
 const resetErrors = () => ({ type: RESET_ERRORS });
 
 // thunks
-export const createRoom = () => dispatch => {
-  let code;
-  return generateRoomCode()
-  .then(_code => {
-    code = _code;
-    return db.ref(`rooms/${code}`).set({ roomCode: code });
-  })
-  .then(() => dispatch(setCode(code)))
-  .catch(err => console.error(err));
-};
-export const deleteRoom = () => (dispatch, getState) => (
-  db.ref(`rooms/${getState().roomCode.value}`).remove()
-  .then(() => dispatch(unsetCode()))
-  .catch(err => console.error(err))
+export const createRoom = () => (
+  function createRoomThunk(dispatch) {
+    let code;
+    return generateRoomCode()
+    .then(_code => {
+      code = _code;
+      return db.ref(`rooms/${code}`).set({ roomCode: code });
+    })
+    .then(() => dispatch(setCode(code)))
+    .catch(err => console.error(err));
+  }
 );
-export const validateCode = code => dispatch => {
-  dispatch(resetErrors());
-  return db.ref(`rooms/${code}`).once('value')
-  .then(snapshot => {
-    if (snapshot.val()) return null;
-    return dispatch(addError(`Room ${code} does not exist`));
-  })
-  .catch(err => console.error(err));
-};
-export const onRoomDisconnect = callback => (dispatch, getState) => {
-  const ref = db.ref(`rooms/${getState().roomCode.value}/roomCode`);
-  const listener = snapshot => {
-    if (!snapshot.val()) {
-      callback();
-      ref.off('value', listener);
-    }
-  };
-  ref.on('value', listener);
-  return () => ref.off('value', listener);
-};
+export const deleteRoom = () => (
+  function deleteRoomThunk(dispatch, getState) {
+    return db.ref(`rooms/${getState().roomCode.value}`).remove()
+    .then(() => dispatch(unsetCode()))
+    .catch(err => console.error(err));
+  }
+);
+export const validateCode = code => (
+  function validateCodeThunk(dispatch) {
+    dispatch(resetErrors());
+    return db.ref(`rooms/${code}`).once('value')
+    .then(snapshot => {
+      if (snapshot.val()) return null;
+      return dispatch(addError(`Room ${code} does not exist`));
+    })
+    .catch(err => console.error(err));
+  }
+);
+export const onRoomDisconnect = callback => (
+  function onRoomDisconnectThunk(dispatch, getState) {
+    const ref = db.ref(`rooms/${getState().roomCode.value}/roomCode`);
+    const listener = snapshot => {
+      if (!snapshot.val()) {
+        callback();
+        ref.off('value', listener);
+      }
+    };
+    ref.on('value', listener);
+    return () => ref.off('value', listener);
+  }
+);
 
 // reducer
 const initialState = {

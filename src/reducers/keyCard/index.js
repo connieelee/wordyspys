@@ -9,19 +9,23 @@ const SET_KEYCARD = 'SET_KEYCARD';
 const setKeyCard = keyCard => ({ type: SET_KEYCARD, keyCard });
 
 // thunks
-export const createKeyCard = () => (dispatch, getState) => {
-  const keyCard = generateKeyCard();
-  return db.ref(`rooms/${getState().roomCode.value}/keyCard`).set(keyCard)
-  .then(() => dispatch(createTurn(keyCard.startingTeam)))
-  .catch(err => console.error(err));
-};
-export const readKeyCard = () => (dispatch, getState) => (
-  db.ref(`rooms/${getState().roomCode.value}/keyCard`).once('value')
-  .then(snapshot => {
-    if (!snapshot.val()) return dispatch(createKeyCard());
-    return dispatch(setKeyCard(snapshot.val()));
-  })
-  .catch(err => console.error(err))
+export const createKeyCard = () => (
+  function createKeyCardThunk(dispatch, getState) {
+    const keyCard = generateKeyCard();
+    return db.ref(`rooms/${getState().roomCode.value}/keyCard`).set(keyCard)
+    .then(() => dispatch(createTurn(keyCard.startingTeam)))
+    .catch(err => console.error(err));
+  }
+);
+export const readKeyCard = () => (
+  function readKeyCardThunk(dispatch, getState) {
+    return db.ref(`rooms/${getState().roomCode.value}/keyCard`).once('value')
+    .then(snapshot => {
+      if (!snapshot.val()) return dispatch(createKeyCard());
+      return dispatch(setKeyCard(snapshot.val()));
+    })
+    .catch(err => console.error(err));
+  }
 );
 
 // reducer

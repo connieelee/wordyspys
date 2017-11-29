@@ -16,26 +16,30 @@ const setCardStatus = (rowId, colId, status) => ({
 });
 
 // thunks
-export const createBoard = () => (dispatch, getState) => {
-  let board;
-  return generateBoard()
-  .then(_board => {
-    board = _board;
-    return db.ref(`rooms/${getState().roomCode.value}/board`).set(board);
-  })
-  .then(() => dispatch(setBoard(board)))
-  .catch(err => console.error(err));
-};
-export const revealCard = (rowId, colId) => (dispatch, getState) => (
-  db.ref(`rooms/${getState().roomCode.value}/keyCard/keys`)
-  .child(rowId).child(colId).once('value')
-  .then(snapshot => {
-    if (!snapshot) return;
-    const selectedCardKey = snapshot.val();
-    dispatch(validateTurn(selectedCardKey));
-    dispatch(setCardStatus(rowId, colId, selectedCardKey));
-  })
-  .catch(err => console.error(err))
+export const createBoard = () => (
+  function createBoardThunk(dispatch, getState) {
+    let board;
+    return generateBoard()
+    .then(_board => {
+      board = _board;
+      return db.ref(`rooms/${getState().roomCode.value}/board`).set(board);
+    })
+    .then(() => dispatch(setBoard(board)))
+    .catch(err => console.error(err));
+  }
+);
+export const revealCard = (rowId, colId) => (
+  function revealCardThunk(dispatch, getState) {
+    return db.ref(`rooms/${getState().roomCode.value}/keyCard/keys`)
+    .child(rowId).child(colId).once('value')
+    .then(snapshot => {
+      if (!snapshot) return;
+      const selectedCardKey = snapshot.val();
+      dispatch(validateTurn(selectedCardKey));
+      dispatch(setCardStatus(rowId, colId, selectedCardKey));
+    })
+    .catch(err => console.error(err));
+  }
 );
 
 // reducer

@@ -18,45 +18,53 @@ const addGuess = word => ({ type: ADD_GUESSES, word });
 const clearGuesses = () => ({ type: CLEAR_GUESSES });
 
 // thunks
-export const createTurn = team => (dispatch, getState) => (
-  db.ref(`rooms/${getState().roomCode.value}/currentTurn`).set({
-    team,
-    isOver: false,
-  })
-  .then(() => dispatch(setCurrentTeam(team)))
-  .catch(err => console.error(err))
-);
-export const listenOnCurrentTurn = () => (dispatch, getState) => {
-  const ref = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
-  const listener = snapshot => {
-    if (!snapshot) return;
-    if (!snapshot.val()) return;
-    const { team, clue, number, isOver } = snapshot.val();
-    dispatch(setCurrentTeam(team));
-    dispatch(setCurrentClue(clue));
-    dispatch(setCurrentNumber(number));
-    dispatch(setTurnOver(isOver));
-  };
-  ref.on('value', listener);
-  return () => ref.off('value', listener);
-};
-export const giveClue = (clue, number) => (dispatch, getState) => {
-  const turnRef = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
-  turnRef.child('clue').set(clue)
-  .then(() => turnRef.child('number').set(number))
-  .then(() => {
-    dispatch(setCurrentClue(clue));
-    dispatch(setCurrentNumber(number));
-  })
-  .catch(err => console.error(err));
-};
-export const makeGuess = (word, rowId, colId) => (dispatch, getState) => {
-  const currentTurn = getState().currentTurn;
-  if (currentTurn.clue && currentTurn.number && !currentTurn.isOver) {
-    dispatch(addGuess(word));
-    dispatch(revealCard(rowId, colId));
+export const createTurn = team => (
+  function createTurnThunk(dispatch, getState) {
+    return db.ref(`rooms/${getState().roomCode.value}/currentTurn`).set({
+      team,
+      isOver: false,
+    })
+    .then(() => dispatch(setCurrentTeam(team)))
+    .catch(err => console.error(err));
   }
-};
+);
+export const listenOnCurrentTurn = () => (
+  function listenOnCurrentTurnThunk(dispatch, getState) {
+    const ref = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
+    const listener = snapshot => {
+      if (!snapshot) return;
+      if (!snapshot.val()) return;
+      const { team, clue, number, isOver } = snapshot.val();
+      dispatch(setCurrentTeam(team));
+      dispatch(setCurrentClue(clue));
+      dispatch(setCurrentNumber(number));
+      dispatch(setTurnOver(isOver));
+    };
+    ref.on('value', listener);
+    return () => ref.off('value', listener);
+  }
+);
+export const giveClue = (clue, number) => (
+  function giveClueThunk(dispatch, getState) {
+    const turnRef = db.ref(`rooms/${getState().roomCode.value}/currentTurn`);
+    return turnRef.child('clue').set(clue)
+    .then(() => turnRef.child('number').set(number))
+    .then(() => {
+      dispatch(setCurrentClue(clue));
+      dispatch(setCurrentNumber(number));
+    })
+    .catch(err => console.error(err));
+  }
+);
+export const makeGuess = (word, rowId, colId) => (
+  function makeGuessThunk(dispatch, getState) {
+    const currentTurn = getState().currentTurn;
+    if (currentTurn.clue && currentTurn.number && !currentTurn.isOver) {
+      dispatch(addGuess(word));
+      dispatch(revealCard(rowId, colId));
+    }
+  }
+);
 export const validateTurn = selectedCardKey => (
   function validateTurnThunk(dispatch, getState) {
     const { guesses, number, team } = getState().currentTurn;
@@ -69,21 +77,22 @@ export const validateTurn = selectedCardKey => (
     .catch(err => console.error(err));
   }
 );
-
-export const endTurn = () => (dispatch, getState) => {
-  const { roomCode, currentTurn } = getState();
-  const roomRef = db.ref(`rooms/${roomCode.value}`);
-  roomRef.child('currentTurn').once('value')
-  .then(snapshot => {
-    const nextTeam = currentTurn.team === 'RED' ? 'BLUE' : 'RED';
-    return Promise.all([
-      roomRef.child('pastTurns').push(snapshot.val()),
-      dispatch(createTurn(nextTeam)),
-      dispatch(clearGuesses()),
-    ]);
-  })
-  .catch(err => console.error(err));
-};
+export const endTurn = () => (
+  function endTurnThunk(dispatch, getState) {
+    const { roomCode, currentTurn } = getState();
+    const roomRef = db.ref(`rooms/${roomCode.value}`);
+    return roomRef.child('currentTurn').once('value')
+    .then(snapshot => {
+      const nextTeam = currentTurn.team === 'RED' ? 'BLUE' : 'RED';
+      return Promise.all([
+        roomRef.child('pastTurns').push(snapshot.val()),
+        dispatch(createTurn(nextTeam)),
+        dispatch(clearGuesses()),
+      ]);
+    })
+    .catch(err => console.error(err));
+  }
+);
 
 // reducer
 const initialState = {
