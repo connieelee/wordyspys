@@ -1,5 +1,5 @@
-import { generateRoomCode } from '../../utils';
 import db from '../../firebase/db';
+import { generateRoomCode } from '../../utils/game';
 
 // constants
 const SET_CODE = 'SET_CODE';

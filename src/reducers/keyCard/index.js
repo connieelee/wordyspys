@@ -1,5 +1,5 @@
 import db from '../../firebase/db';
-import { generateKeyCard } from '../../utils';
+import { generateKeyCard } from '../../utils/game';
 import { createTurn } from '../actionCreators';
 
 // constants

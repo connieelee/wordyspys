@@ -1,13 +1,14 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import db from '../../firebase/db';
-import mockStoreInitialState from '../../utils/mockStoreInitialState';
+
 import spymastersReducer, {
   createSpymasters,
   listenOnSpymasters,
   claimMaster,
   disconnectMaster,
 } from './';
+import { mockStoreInitialState } from '../../utils/tests';
 
 const mockStore = configureMockStore([thunk]);
 

@@ -10,4 +10,11 @@ export default {
       BLUE: false,
     },
   },
+  currentTurn: {
+    team: 'Pending',
+    clue: null,
+    number: null,
+    guesses: [],
+    isOver: false,
+  },
 };

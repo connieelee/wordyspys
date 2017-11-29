@@ -1,5 +1,5 @@
-import { generateBoard } from '../../utils';
 import db from '../../firebase/db';
+import { generateBoard } from '../../utils/game';
 import { validateTurn } from '../actionCreators';
 
 // constants

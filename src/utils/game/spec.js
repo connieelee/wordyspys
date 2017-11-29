@@ -1,9 +1,9 @@
-import db from '../firebase/db';
+import db from '../../firebase/db';
 import {
   generateRoomCode,
   generateBoard,
   generateKeyCard,
-} from '../utils';
+} from './';
 
 describe('utils', () => {
   describe('generateRoomCode', () => {

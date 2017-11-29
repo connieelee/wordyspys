@@ -1,10 +1,12 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import db from '../../firebase/db';
-import keyCardReducer, { createKeyCard } from './';
 
-import mockStoreInitialState from '../../utils/mockStoreInitialState';
-import testKeyCard from '../../../seed/room/keyCard';
+import keyCardReducer, { createKeyCard } from './';
+import {
+  mockStoreInitialState,
+  testKeyCard,
+} from '../../utils/tests';
 
 const mockStore = configureMockStore([thunk]);
 
@@ -25,16 +27,20 @@ describe('Key Card Reducer', () => {
       return db.ref('rooms/test').set({ roomCode: 'test' });
     });
 
-    describe.only('createKeyCard', () => {
+    describe('createKeyCard', () => {
       it('updates the db with newly created keyCard', () => (
         store.dispatch(createKeyCard())
-        .then(action => Promise.all([db.ref('rooms/test/keyCard').once('value'), action.keyCard]))
-        .then(([snapshot, keyCard]) => expect(snapshot.val()).toEqual(keyCard))
+        .then(() => db.ref('rooms/test/keyCard').once('value'))
+        .then(snapshot => {
+          const { startingTeam, keys } = snapshot.val();
+          expect(startingTeam).toMatch(/^RED|BLUE$/);
+          expect(keys).toEqual(expect.any(Array));
+        })
       ));
-      it('creates SET_KEYCARD and SET_CURRENT_TEAM once keys have been created', () => (
+      it('creates SET_CURRENT_TEAM once starting team is determined', () => (
         store.dispatch(createKeyCard())
         .then(() => {
-          const expectedActionTypes = ['SET_KEYCARD', 'SET_CURRENT_TEAM'];
+          const expectedActionTypes = ['SET_CURRENT_TEAM'];
           const actualActionTypes = store.getActions().map(action => action.type);
           expect(actualActionTypes).toContain(...expectedActionTypes);
         })
