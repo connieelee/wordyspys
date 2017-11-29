@@ -10,19 +10,21 @@ import {
 } from '../../utils/tests';
 
 describe('Board Reducer', () => {
-  it('should return initial state', () => {
-    expect(boardReducer(undefined, {})).toEqual([]);
-  });
-  it('should handle SET_BOARD', () => {
-    const action = { type: 'SET_BOARD', board: testBoard };
-    Reducer(boardReducer).expect(action).toReturnState(testBoard);
-  });
-  it('should handle SET_CARD_STATUS', () => {
-    const action = { type: 'SET_CARD_STATUS', rowId: 0, colId: 0, status: 'RED' };
-    const expectedBoard = [...testBoard];
-    expectedBoard[0][0] = Object.assign({}, testBoard[0][0]);
-    expectedBoard[0][0].status = 'RED';
-    Reducer(boardReducer).withState(testBoard).expect(action).toReturnState(expectedBoard);
+  describe('sync actions', () => {
+    it('should return initial state', () => {
+      expect(boardReducer(undefined, {})).toEqual([]);
+    });
+    it('should handle SET_BOARD', () => {
+      const action = { type: 'SET_BOARD', board: testBoard };
+      Reducer(boardReducer).expect(action).toReturnState(testBoard);
+    });
+    it('should handle SET_CARD_STATUS', () => {
+      const action = { type: 'SET_CARD_STATUS', rowId: 0, colId: 0, status: 'RED' };
+      const expectedBoard = [...testBoard];
+      expectedBoard[0][0] = Object.assign({}, testBoard[0][0]);
+      expectedBoard[0][0].status = 'RED';
+      Reducer(boardReducer).withState(testBoard).expect(action).toReturnState(expectedBoard);
+    });
   });
 
   describe('thunks', () => {

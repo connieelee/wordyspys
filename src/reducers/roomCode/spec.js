@@ -1,75 +1,71 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { Reducer, Thunk } from 'redux-testkit';
 import db from '../../firebase/db';
 import roomCodeReducer, { createRoom, deleteRoom } from './';
-
-const mockStore = configureMockStore([thunk]);
+import { mockStoreInitialState, seedTestRoom } from '../../utils/tests';
 
 describe('Room Code Reducer', () => {
-  const initialState = {
-    value: '',
-    errors: [],
-  };
+  describe('sync actions', () => {
+    const initialState = { value: '', errors: [] };
+    const stateWithCode = { value: 'test', errors: [] };
+    const error = 'Room does not exist';
+    const stateWithError = { value: '', errors: [error] };
 
-  it('should return initial state', () => {
-    expect(roomCodeReducer(undefined, {})).toEqual(initialState);
-  });
-  it('should handle SET_CODE', () => {
-    const setAction = { type: 'SET_CODE', code: 'test' };
-    expect(roomCodeReducer(initialState, setAction)).toEqual({
-      value: 'test',
-      errors: [],
+    it('should return initial state', () => {
+      expect(roomCodeReducer(undefined, {})).toEqual(initialState);
     });
-  });
-  it('should handle UNSET_CODE', () => {
-    const setAction = { type: 'UNSET_CODE' };
-    const state = {
-      value: 'test',
-      errors: [],
-    };
-    expect(roomCodeReducer(state, setAction)).toEqual(initialState);
+    it('should handle SET_CODE', () => {
+      const action = { type: 'SET_CODE', code: 'test' };
+      Reducer(roomCodeReducer).expect(action).toReturnState(stateWithCode);
+    });
+    it('should handle UNSET_CODE', () => {
+      const action = { type: 'UNSET_CODE' };
+      expect(roomCodeReducer(stateWithCode, action)).toEqual(initialState);
+    });
+    it('should handle ADD_ERROR', () => {
+      const action = { type: 'ADD_ERROR', error };
+      Reducer(roomCodeReducer).expect(action).toReturnState(stateWithError);
+    });
+    it('should handle RESET_ERRORS', () => {
+      const action = { type: 'RESET_ERRORS' };
+      Reducer(roomCodeReducer).withState(stateWithError).expect(action).toReturnState(initialState);
+    });
   });
 
   describe('thunks', () => {
-    let store;
-    let code;
-    beforeEach(() => {
-      store = mockStore({ roomCode: initialState });
-      return db.ref('rooms/test').set({ roomCode: 'test' });
-    });
-
     describe('createRoom', () => {
-      afterEach(() => db.ref(`rooms/${code}`).remove());
-
-      it('creates new room in db', () => (
-        store.dispatch(createRoom())
-        .then(action => {
-          code = action.code;
-          return db.ref(`rooms/${action.code}`).once('value');
+      let dispatches;
+      let code;
+      beforeEach(() => (
+        Thunk(createRoom).execute()
+        .then(_dispatches => {
+          dispatches = _dispatches;
+          code = dispatches[0].getAction().code;
         })
+      ));
+      afterEach(() => db.ref(`rooms/${code}`).remove());
+      it('creates new room in db', () => (
+        db.ref(`rooms/${code}`).once('value')
         .then(snapshot => expect(snapshot.val().roomCode).toEqual(code))
       ));
-      it('creates SET_CODE once room has been created', () => (
-        store.dispatch(createRoom())
-        .then(action => {
-          code = action.code;
-          expect(action.type).toEqual('SET_CODE');
-        })
-      ));
+      it('dispatches SET_CODE once room has been created', () => {
+        expect(dispatches[0].getAction()).toEqual({ type: 'SET_CODE', code });
+      });
     });
 
     describe('deleteRoom', () => {
-      afterEach(() => db.ref('rooms/test').set({ roomCode: 'test' }));
-
+      let dispatches;
+      beforeEach(() => (
+        seedTestRoom()
+        .then(() => Thunk(deleteRoom).withState(mockStoreInitialState).execute())
+        .then(_dispatches => { dispatches = _dispatches; })
+      ));
       it('deletes room from db', () => (
-        store.dispatch(deleteRoom())
-        .then(() => db.ref('rooms/test').once('value'))
+        db.ref('rooms/test').once('value')
         .then(snapshot => expect(snapshot.val()).toBeFalsy())
       ));
-      it('creates UNSET_CODE once room has been deleted', () => (
-        store.dispatch(deleteRoom())
-        .then(action => expect(action.type).toEqual('UNSET_CODE'))
-      ));
+      it('dispatches UNSET_CODE once room has been deleted', () => {
+        expect(dispatches[0].getAction()).toEqual({ type: 'UNSET_CODE' });
+      });
     });
   });
 });

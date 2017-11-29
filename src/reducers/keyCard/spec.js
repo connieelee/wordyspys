@@ -9,13 +9,15 @@ import {
 } from '../../utils/tests';
 
 describe('Key Card Reducer', () => {
-  it('should return initial state', () => {
-    const initialState = { startingTeam: '', keys: [] };
-    expect(keyCardReducer(undefined, {})).toEqual(initialState);
-  });
-  it('should handle SET_KEY_CARD', () => {
-    const action = { type: 'SET_KEY_CARD', keyCard: testKeyCard };
-    Reducer(keyCardReducer).expect(action).toReturnState(testKeyCard);
+  describe('sync actions', () => {
+    it('should return initial state', () => {
+      const initialState = { startingTeam: '', keys: [] };
+      expect(keyCardReducer(undefined, {})).toEqual(initialState);
+    });
+    it('should handle SET_KEY_CARD', () => {
+      const action = { type: 'SET_KEY_CARD', keyCard: testKeyCard };
+      Reducer(keyCardReducer).expect(action).toReturnState(testKeyCard);
+    });
   });
 
   describe('thunks', () => {
