@@ -48,7 +48,7 @@ describe('Spymasters Reducer', () => {
 
   describe('thunks', () => {
     describe('that start with empty state/db', () => {
-      beforeEach(() => seedTestRoom({ spymasters: true }));
+      beforeEach(() => seedTestRoom());
       describe('createSpymasters', () => {
         let actions;
         beforeEach(() => (

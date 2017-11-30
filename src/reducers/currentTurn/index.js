@@ -18,13 +18,13 @@ const addGuess = word => ({ type: ADD_GUESSES, word });
 const clearGuesses = () => ({ type: CLEAR_GUESSES });
 
 // thunks
-export const createTurn = team => (
+export const createTurn = startingTeam => (
   function createTurnThunk(dispatch, getState) {
     return db.ref(`rooms/${getState().roomCode.value}/currentTurn`).set({
-      team,
+      team: startingTeam,
       isOver: false,
     })
-    .then(() => dispatch(setCurrentTeam(team)))
+    .then(() => dispatch(setCurrentTeam(startingTeam)))
     .catch(err => console.error(err));
   }
 );
