@@ -17,6 +17,7 @@ import {
 describe('Room Code Reducer', () => {
   const initialState = { value: '', errors: [] };
   const stateWithCode = { value: 'test', errors: [] };
+
   describe('sync actions', () => {
     const error = 'Room does not exist';
     const stateWithError = { value: '', errors: [error] };
@@ -53,7 +54,9 @@ describe('Room Code Reducer', () => {
           code = dispatches[0].getAction().code;
         })
       ));
+
       afterEach(() => db.ref(`rooms/${code}`).remove());
+
       it('creates new room in db', () => (
         db.ref(`rooms/${code}`).once('value')
         .then(snapshot => expect(snapshot.val().roomCode).toEqual(code))
@@ -70,6 +73,7 @@ describe('Room Code Reducer', () => {
         .then(() => Thunk(deleteRoom).withState({ roomCode: initialState }).execute())
         .then(_dispatches => { dispatches = _dispatches; })
       ));
+
       it('deletes room from db', () => (
         db.ref('rooms/test').once('value')
         .then(snapshot => expect(snapshot.val()).toBeFalsy())
@@ -108,7 +112,9 @@ describe('Room Code Reducer', () => {
             .execute(spy);
           return db.ref('rooms/test').remove();
         });
+
         afterEach(() => seedTestRoom());
+
         it('executes callback', () => {
           expect(spy.mock.calls).toHaveLength(1);
         });

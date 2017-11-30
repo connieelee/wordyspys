@@ -27,16 +27,18 @@ export const createSpymasters = () => (
 export const listenOnSpymasters = () => (
   function listenOnSpymastersThunk(dispatch, getState) {
     const ref = db.ref(`rooms/${getState().roomCode.value}/spymasters`);
-    const listener = snapshot => {
-      if (!snapshot) return;
-      if (!snapshot.val()) return;
-      const { RED: newRed, BLUE: newBlue } = snapshot.val();
-      const { RED: prevRed, BLUE: prevBlue } = getState().spymasters.taken;
-      if (newRed !== prevRed) dispatch(markMasterTaken('RED', newRed));
-      if (newBlue !== prevBlue) dispatch(markMasterTaken('BLUE', newBlue));
+    const createListener = teamColor => snapshot => {
+      const updatedValue = snapshot.val();
+      if (updatedValue !== null) dispatch(markMasterTaken(teamColor, updatedValue));
     };
-    ref.on('value', listener);
-    return () => ref.off('value', listener);
+    const redListener = createListener('RED');
+    const blueListener = createListener('BLUE');
+    ref.child('RED').on('value', redListener);
+    ref.child('BLUE').on('value', blueListener);
+    return () => {
+      ref.child('RED').off('value', redListener);
+      ref.child('BLUE').off('value', blueListener);
+    };
   }
 );
 export const claimMaster = color => (

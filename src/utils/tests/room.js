@@ -6,6 +6,13 @@ export const testRoom = {
   roomCode: 'test',
   board,
   keyCard,
+  spymasters: {
+    ownTeam: '',
+    taken: {
+      RED: false,
+      BLUE: false,
+    },
+  },
 };
 
 export const seedTestRoom = (config = {}) => {
