@@ -16,30 +16,33 @@ import {
 
 describe('Room Code Reducer', () => {
   const initialState = { value: '', errors: [] };
-  const stateWithCode = { value: 'test', errors: [] };
 
   describe('sync actions', () => {
-    const error = 'Room does not exist';
-    const stateWithError = { value: '', errors: [error] };
-
     it('should return initial state', () => {
       expect(roomCodeReducer(undefined, {})).toEqual(initialState);
     });
     it('should handle SET_CODE', () => {
       const action = { type: 'SET_CODE', code: 'test' };
-      Reducer(roomCodeReducer).expect(action).toReturnState(stateWithCode);
+      Reducer(roomCodeReducer).expect(action).toChangeInState({ value: 'test' });
     });
     it('should handle UNSET_CODE', () => {
       const action = { type: 'UNSET_CODE' };
-      expect(roomCodeReducer(stateWithCode, action)).toEqual(initialState);
+      Reducer(roomCodeReducer)
+        .withState(Object.assign({ value: 'test' }, initialState))
+        .expect(action)
+        .toReturnState(initialState);
     });
     it('should handle ADD_ERROR', () => {
+      const error = 'Room does not exist';
       const action = { type: 'ADD_ERROR', error };
-      Reducer(roomCodeReducer).expect(action).toReturnState(stateWithError);
+      Reducer(roomCodeReducer).expect(action).toChangeInState({ errors: [error] });
     });
     it('should handle RESET_ERRORS', () => {
       const action = { type: 'RESET_ERRORS' };
-      Reducer(roomCodeReducer).withState(stateWithError).expect(action).toReturnState(initialState);
+      Reducer(roomCodeReducer)
+        .withState(Object.assign({ errors: ['Room does not exist'] }, initialState))
+        .expect(action)
+        .toReturnState(initialState);
     });
   });
 

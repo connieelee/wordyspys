@@ -23,7 +23,10 @@ describe('Board Reducer', () => {
       const expectedBoard = [...testBoard];
       expectedBoard[0][0] = Object.assign({}, testBoard[0][0]);
       expectedBoard[0][0].status = 'RED';
-      Reducer(boardReducer).withState(testBoard).expect(action).toReturnState(expectedBoard);
+      Reducer(boardReducer)
+        .withState(testBoard)
+        .expect(action)
+        .toReturnState(expectedBoard);
     });
   });
 
