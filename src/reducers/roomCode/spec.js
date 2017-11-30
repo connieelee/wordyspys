@@ -1,12 +1,23 @@
 import { Reducer, Thunk } from 'redux-testkit';
+import configureMockStore from 'redux-mock-store';
+import thunks from 'redux-thunk';
 import db from '../../firebase/db';
-import roomCodeReducer, { createRoom, deleteRoom } from './';
-import { mockStoreInitialState, seedTestRoom } from '../../utils/tests';
+
+import roomCodeReducer, {
+  createRoom,
+  deleteRoom,
+  validateCode,
+  onRoomDisconnect,
+} from './';
+import {
+  mockStoreInitialState,
+  seedTestRoom,
+} from '../../utils/tests';
 
 describe('Room Code Reducer', () => {
+  const initialState = { value: '', errors: [] };
+  const stateWithCode = { value: 'test', errors: [] };
   describe('sync actions', () => {
-    const initialState = { value: '', errors: [] };
-    const stateWithCode = { value: 'test', errors: [] };
     const error = 'Room does not exist';
     const stateWithError = { value: '', errors: [error] };
 
@@ -48,7 +59,7 @@ describe('Room Code Reducer', () => {
         .then(snapshot => expect(snapshot.val().roomCode).toEqual(code))
       ));
       it('dispatches SET_CODE once room has been created', () => {
-        expect(dispatches[0].getAction()).toEqual({ type: 'SET_CODE', code });
+        expect(dispatches[0].getType()).toEqual('SET_CODE');
       });
     });
 
@@ -56,7 +67,7 @@ describe('Room Code Reducer', () => {
       let dispatches;
       beforeEach(() => (
         seedTestRoom()
-        .then(() => Thunk(deleteRoom).withState(mockStoreInitialState).execute())
+        .then(() => Thunk(deleteRoom).withState({ roomCode: initialState }).execute())
         .then(_dispatches => { dispatches = _dispatches; })
       ));
       it('deletes room from db', () => (
@@ -64,7 +75,54 @@ describe('Room Code Reducer', () => {
         .then(snapshot => expect(snapshot.val()).toBeFalsy())
       ));
       it('dispatches UNSET_CODE once room has been deleted', () => {
-        expect(dispatches[0].getAction()).toEqual({ type: 'UNSET_CODE' });
+        expect(dispatches[0].getType()).toEqual('UNSET_CODE');
+      });
+    });
+
+    describe('validateCode', () => {
+      it('dispatches RESET_ERRORS', () => (
+        Thunk(validateCode).execute('test')
+        .then(dispatches => {
+          const found = dispatches.find(dispatch => dispatch.getType() === 'RESET_ERRORS');
+          expect(found).toBeTruthy();
+        })
+      ));
+      it('dispatches ADD_ERROR if no room matches code', () => (
+        db.ref('rooms/test').remove()
+        .then(() => Thunk(validateCode).execute('test'))
+        .then(dispatches => {
+          const found = dispatches.map(dispatch => dispatch.getType() === 'ADD_ERROR');
+          expect(found).toBeTruthy();
+        })
+      ));
+    });
+
+    describe('onRoomDisconnect', () => {
+      describe('when room is removed from db', () => {
+        const spy = jest.fn();
+        let dispatches;
+        beforeEach(() => {
+          jest.resetAllMocks();
+          dispatches = Thunk(onRoomDisconnect)
+            .withState({ roomCode: initialState })
+            .execute(spy);
+          return db.ref('rooms/test').remove();
+        });
+        afterEach(() => seedTestRoom());
+        it('executes callback', () => {
+          expect(spy.mock.calls).toHaveLength(1);
+        });
+        it('dispatches UNSET_CODE', () => {
+          expect(dispatches[0].getType()).toEqual('UNSET_CODE');
+        });
+      });
+      it('returns an unsubscribing function', () => {
+        const spy = jest.fn();
+        const store = configureMockStore([thunks])(mockStoreInitialState);
+        const unsubscribe = store.dispatch(onRoomDisconnect(spy));
+        unsubscribe();
+        return db.ref('rooms/test').remove()
+        .then(() => expect(spy.mock.calls).toHaveLength(0));
       });
     });
   });

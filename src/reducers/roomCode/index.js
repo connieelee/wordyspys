@@ -50,6 +50,7 @@ export const onRoomDisconnect = callback => (
     const listener = snapshot => {
       if (!snapshot.val()) {
         callback();
+        dispatch(unsetCode());
         ref.off('value', listener);
       }
     };

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
@@ -13,7 +14,6 @@ import {
 
 import {
   claimMaster,
-  unsetCode,
   disconnectMaster,
   onRoomDisconnect,
 } from '../../reducers/actionCreators';
@@ -23,7 +23,6 @@ const mapState = state => ({
 });
 const mapDispatch = dispatch => ({
   claimMaster: color => dispatch(claimMaster(color)),
-  unsetCode: () => dispatch(unsetCode()),
   disconnect: () => dispatch(disconnectMaster()),
   onRoomDisconnect: callback => dispatch(onRoomDisconnect(callback)),
 });
@@ -47,7 +46,6 @@ class SpymasterRouter extends React.Component {
 
   attachRoomListener() {
     this.props.onRoomDisconnect(() => {
-      this.props.unsetCode();
       this.props.history.push('/masters');
     });
   }
@@ -97,8 +95,8 @@ SpymasterRouter.propTypes = {
     error: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   disconnect: PropTypes.func.isRequired,
-  unsetCode: PropTypes.func.isRequired,
   onRoomDisconnect: PropTypes.func.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
 };
 
 export default connect(mapState, mapDispatch)(SpymasterRouter);
