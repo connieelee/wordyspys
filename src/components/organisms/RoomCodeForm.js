@@ -57,7 +57,8 @@ class RoomCodeForm extends React.Component {
   render() {
     return (
       <div>
-        <Typography type="subheading">Please enter the four-digit room code below</Typography>
+        <Typography type="headline" align="center">Welcome, Spymaster</Typography>
+        <Typography type="subheading" align="center">Please enter room code below</Typography>
         <form noValidate autoComplete="off" onSubmit={this.submit}>
           <Grid container direction="column" alignItems="center">
             <Grid item>
@@ -78,8 +79,7 @@ class RoomCodeForm extends React.Component {
                 color="primary"
                 disabled={!this.state.isValid}
               >
-                Next
-                <SendIcon />
+                Join Room <SendIcon className="right-button" />
               </Button>
             </Grid>
           </Grid>

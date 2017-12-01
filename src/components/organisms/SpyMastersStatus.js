@@ -13,7 +13,7 @@ const mapState = state => ({
 const mapDispatch = null;
 
 const SpyMastersStatus = ({ roomCode, redTaken, blueTaken }) => (
-  <Card>
+  <Card className="panel-card">
     <CardContent>
       <Typography type="headline" component="h2">
         SPY MASTERS STATUS

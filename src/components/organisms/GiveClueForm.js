@@ -54,53 +54,51 @@ class GiveClueForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <form noValidate autoComplete="off" onSubmit={this.submit}>
-          <Grid container direction="column" alignItems="center">
-            <Grid item>
-              <TextField
-                required
-                type="text"
-                name="clue"
-                onChange={this.updateInputValue}
-                label="Clue (required)"
-                margin="normal"
-              />
-              {!!this.state.clue.errors.length && this.state.clue.errors.map(err => (
-                <Grid item key="err">
-                  <Typography color="accent">{err}</Typography>
-                </Grid>
-              ))}
-            </Grid>
-            <Grid item>
-              <TextField
-                required
-                type="number"
-                name="number"
-                onChange={this.updateInputValue}
-                label="Number (required)"
-                margin="normal"
-              />
-              {!!this.state.number.errors.length && this.state.number.errors.map(err => (
-                <Grid item key="err">
-                  <Typography color="accent">{err}</Typography>
-                </Grid>
-              ))}
-            </Grid>
-            <Grid item>
-              <Button
-                raised
-                type="submit"
-                color="primary"
-                disabled={!this.state.clue.isValid || !this.state.number.isValid}
-              >
-                Submit
-                <SendIcon />
-              </Button>
-            </Grid>
+      <form noValidate autoComplete="off" onSubmit={this.submit}>
+        <Grid container direction="column" alignItems="center">
+          <Grid item>
+            <TextField
+              required
+              type="text"
+              name="clue"
+              onChange={this.updateInputValue}
+              label="Clue (required)"
+              margin="normal"
+            />
+            {!!this.state.clue.errors.length && this.state.clue.errors.map(err => (
+              <Grid item key="err">
+                <Typography color="accent">{err}</Typography>
+              </Grid>
+            ))}
           </Grid>
-        </form>
-      </div>
+          <Grid item>
+            <TextField
+              required
+              type="number"
+              name="number"
+              onChange={this.updateInputValue}
+              label="Number (required)"
+              margin="normal"
+            />
+            {!!this.state.number.errors.length && this.state.number.errors.map(err => (
+              <Grid item key="err">
+                <Typography color="accent">{err}</Typography>
+              </Grid>
+            ))}
+          </Grid>
+          <Grid item>
+            <Button
+              raised
+              type="submit"
+              color="primary"
+              disabled={!this.state.clue.isValid || !this.state.number.isValid}
+            >
+              Submit
+              <SendIcon />
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
     );
   }
 }

@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
-import { Board, SpyMastersStatus, CurrentTurn } from '../organisms';
+import {
+  Board,
+  SpyMastersStatus,
+  CurrentTurn,
+  PastTurns,
+} from '../organisms';
 
 import {
   createRoom,
@@ -56,9 +60,10 @@ class LocalGame extends React.Component {
         <Grid item lg={8} container alignItems="center" justify="center" style={{ backgroundColor: '#607D8B' }}>
           <Board item />
         </Grid>
-        <Grid item lg={4} className="side-panel">
-          <SpyMastersStatus />
-          <CurrentTurn />
+        <Grid item lg={4} style={{ width: '100%' }}>
+          <Grid item><SpyMastersStatus /></Grid>
+          <Grid item><CurrentTurn /></Grid>
+          <Grid item><PastTurns /></Grid>
         </Grid>
       </Grid>
     );

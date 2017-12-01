@@ -19,7 +19,7 @@ const mapDispatch = dispatch => ({
 });
 
 const CurrentTurn = ({ team, clue, number, turnIsOver, end }) => (
-  <Card>
+  <Card className="panel-card">
     <CardContent>
       <Typography type="headline" component="h2">CURRENT TURN</Typography>
       <div>

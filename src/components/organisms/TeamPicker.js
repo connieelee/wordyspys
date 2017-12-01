@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 
+import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
@@ -41,25 +42,33 @@ class TeamPicker extends React.Component {
 
   render() {
     return (
-      <div>
-        <Typography type="subheading" align="center">Select Your Team</Typography>
-        <Button
-          raised
-          color="primary"
-          onClick={this.select}
-          disabled={this.props.blueTaken}
-        >
-          BLUE
-        </Button>
-        <Button
-          raised
-          color="accent"
-          onClick={this.select}
-          disabled={this.props.redTaken}
-        >
-          RED
-        </Button>
-      </div>
+      <Grid container direction="column">
+        <Grid item>
+          <Typography type="subheading" align="center">
+            Select Your Team
+          </Typography>
+        </Grid>
+        <Grid item style={{ margin: '0 auto' }}>
+          <Button
+            raised
+            color="primary"
+            onClick={this.select}
+            disabled={this.props.blueTaken}
+          >
+            BLUE
+          </Button>
+        </Grid>
+        <Grid item style={{ margin: '0 auto' }}>
+          <Button
+            raised
+            color="accent"
+            onClick={this.select}
+            disabled={this.props.redTaken}
+          >
+            RED
+          </Button>
+        </Grid>
+      </Grid>
     );
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import { GiveClueForm, KeyCard } from '../organisms';
 
@@ -29,14 +30,26 @@ class SpymasterMain extends React.Component {
   render() {
     const { ownTeam, currentTeam, clue, number } = this.props;
     return (
-      <div>
-        <Typography align="center">YOUR TEAM: {ownTeam}</Typography>
-        <KeyCard />
-        {((currentTeam === ownTeam) && (clue && number)) &&
-        <Typography>YOUR CLUE: {clue} for {number}</Typography>}
-        {((currentTeam === ownTeam) && !(clue && number)) && <GiveClueForm />}
-        {(currentTeam !== ownTeam) && <Typography>wait for your turn</Typography>}
-      </div>
+      <Grid
+        item
+        container
+        direction="column"
+        alignItems="center"
+        justify="space-between"
+      >
+        <Grid item>
+          <Typography type="headline" align="center">KEY CARD</Typography>
+          <KeyCard />
+        </Grid>
+        <Grid item>
+          <Typography type="headline" align="center">{ownTeam} SPYMASTER</Typography>
+          {currentTeam === ownTeam ? (
+            (clue && number) ?
+              <Typography align="center">YOUR CLUE: {clue} for {number}</Typography> :
+              <GiveClueForm />
+          ) : <Typography align="center">Wait for your turn!</Typography>}
+        </Grid>
+      </Grid>
     );
   }
 }

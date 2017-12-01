@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
 import { SpymasterMain } from './';
 import {
   TeamPicker,
@@ -72,7 +71,6 @@ class SpymasterRouter extends React.Component {
           alignItems="center"
           justify="center"
         >
-          <Typography type="headline">HEY, SPY MASTER!</Typography>
           <Switch>
             <Route path="/masters/team" render={this.renderWithRedirect(TeamPicker)} />
             <Route path="/masters/key" render={this.renderWithRedirect(SpymasterMain)} />

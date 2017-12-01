@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
 import Card from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
 
 const mapState = state => ({
   keys: state.keyCard.keys,
@@ -12,7 +11,7 @@ const mapState = state => ({
 });
 const mapDispatch = null;
 
-const KeyCard = ({ keys, startingTeam }) => (
+const KeyCard = ({ keys }) => (
   <div>
     {keys.map(row => (
       <Grid container>
@@ -29,7 +28,6 @@ const KeyCard = ({ keys, startingTeam }) => (
         })}
       </Grid>
     ))}
-    <Typography align="center">the starting team is {startingTeam}!</Typography>
   </div>
 );
 
