@@ -1,13 +1,13 @@
 import _ from 'underscore';
 import db from '../../firebase/db';
 
-const randomAlphanumericString = length => {
-  const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const randIdx = () => Math.floor(Math.random() * alphanumeric.length);
-  return new Array(length).fill().map(() => alphanumeric[randIdx()]).join('');
+const makeValidCode = length => {
+  const validChars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+  const randIdx = () => Math.floor(Math.random() * validChars.length);
+  return new Array(length).fill().map(() => validChars[randIdx()]).join('');
 };
 export const generateRoomCode = () => {
-  const code = randomAlphanumericString(4);
+  const code = makeValidCode(4);
   return db.ref(`rooms/${code}`).once('value')
   .then(snapshot => {
     if (snapshot.val()) return generateRoomCode();

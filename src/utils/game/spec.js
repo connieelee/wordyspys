@@ -7,9 +7,13 @@ import {
 
 describe('utils', () => {
   describe('generateRoomCode', () => {
-    it('returns a promise for a four-long alphanumeric string', () => (
-      expect(generateRoomCode()).resolves.toMatch(/^[a-zA-Z0-9]{4}$/)
-    ));
+    it('returns a promise for a four-long room code with no confusing characters', () => {
+      const generate = generateRoomCode();
+      return Promise.all([
+        expect(generate).resolves.toMatch(/^[\w]{4}$/),
+        expect(generate).resolves.toMatch(/^[^_01lI]{4}$/),
+      ])
+    });
     it('never resolves to a room code in use', () => (
       generateRoomCode()
       .then(code => db.ref(`rooms/${code}`).once('value'))
