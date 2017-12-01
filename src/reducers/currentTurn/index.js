@@ -36,9 +36,9 @@ export const listenOnCurrentTurn = () => (
       if (!snapshot.val()) return;
       const { team, clue, number, isOver } = snapshot.val();
       dispatch(setCurrentTeam(team));
-      dispatch(setCurrentClue(clue));
-      dispatch(setCurrentNumber(number));
-      dispatch(setTurnOver(isOver));
+      if (clue) dispatch(setCurrentClue(clue));
+      if (number) dispatch(setCurrentNumber(number));
+      if (isOver) dispatch(setTurnOver(isOver));
     };
     ref.on('value', listener);
     return () => ref.off('value', listener);
@@ -67,7 +67,6 @@ export const makeGuess = (word, rowId, colId) => (
 export const validateTurn = selectedCardKey => (
   function validateTurnThunk(dispatch, getState) {
     const { guesses, number, team } = getState().currentTurn;
-    // TODO: teamPassed
     const outOfGuesses = guesses.length === number + 1;
     const notOurs = selectedCardKey !== team;
     if (!(outOfGuesses || notOurs)) return Promise.resolve(null);

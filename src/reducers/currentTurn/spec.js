@@ -235,7 +235,7 @@ describe('Current Turn Reducer', () => {
         team: 'RED',
         clue: 'clue',
         number: 2,
-        guesses: ['ALPS', 'FORK', 'FRANCE'],
+        guesses: ['ALPS', 'FORK'],
         isOver: true,
       };
       const syncActionTypes = [];
@@ -259,7 +259,7 @@ describe('Current Turn Reducer', () => {
         db.ref('rooms/test/pastTurns').once('value')
         .then(snapshot => {
           const pastTurns = Object.values(snapshot.val());
-          expect(pastTurns[0]).toEqual(sampleTurn);
+          expect(pastTurns).toEqual(expect.arrayContaining([sampleTurn]));
         })
       ));
       it('dispatches `createTurn`', () => {
