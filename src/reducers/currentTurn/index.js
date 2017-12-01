@@ -6,7 +6,7 @@ const SET_CURRENT_TEAM = 'SET_CURRENT_TEAM';
 const SET_CURRENT_CLUE = 'SET_CURRENT_CLUE';
 const SET_CURRENT_NUMBER = 'SET_CURRENT_NUMBER';
 const SET_TURN_OVER = 'SET_TURN_OVER';
-const ADD_GUESSES = 'ADD_GUESSES';
+const ADD_GUESS = 'ADD_GUESS';
 const CLEAR_GUESSES = 'CLEAR_GUESSES';
 
 // actions
@@ -14,7 +14,7 @@ const setCurrentTeam = team => ({ type: SET_CURRENT_TEAM, team });
 const setCurrentClue = clue => ({ type: SET_CURRENT_CLUE, clue });
 const setCurrentNumber = number => ({ type: SET_CURRENT_NUMBER, number });
 const setTurnOver = isOver => ({ type: SET_TURN_OVER, isOver });
-const addGuess = word => ({ type: ADD_GUESSES, word });
+const addGuess = word => ({ type: ADD_GUESS, word });
 const clearGuesses = () => ({ type: CLEAR_GUESSES });
 
 // thunks
@@ -58,11 +58,10 @@ export const giveClue = (clue, number) => (
 );
 export const makeGuess = (word, rowId, colId) => (
   function makeGuessThunk(dispatch, getState) {
-    const currentTurn = getState().currentTurn;
-    if (currentTurn.clue && currentTurn.number && !currentTurn.isOver) {
-      dispatch(addGuess(word));
-      dispatch(revealCard(rowId, colId));
-    }
+    const { clue, number, isOver } = getState().currentTurn;
+    if (!clue || !number || isOver) return;
+    dispatch(addGuess(word));
+    dispatch(revealCard(rowId, colId));
   }
 );
 export const validateTurn = selectedCardKey => (
@@ -71,7 +70,7 @@ export const validateTurn = selectedCardKey => (
     // TODO: teamPassed
     const outOfGuesses = guesses.length === number + 1;
     const notOurs = selectedCardKey !== team;
-    if (!(outOfGuesses || notOurs)) return null;
+    if (!(outOfGuesses || notOurs)) return Promise.resolve(null);
     return db.ref(`rooms/${getState().roomCode.value}/currentTurn/isOver`).set(true)
     .then(() => dispatch(setTurnOver(true)))
     .catch(err => console.error(err));
@@ -80,16 +79,12 @@ export const validateTurn = selectedCardKey => (
 export const endTurn = () => (
   function endTurnThunk(dispatch, getState) {
     const { roomCode, currentTurn } = getState();
-    const roomRef = db.ref(`rooms/${roomCode.value}`);
-    return roomRef.child('currentTurn').once('value')
-    .then(snapshot => {
-      const nextTeam = currentTurn.team === 'RED' ? 'BLUE' : 'RED';
-      return Promise.all([
-        roomRef.child('pastTurns').push(snapshot.val()),
-        dispatch(createTurn(nextTeam)),
-        dispatch(clearGuesses()),
-      ]);
-    })
+    const nextTeam = currentTurn.team === 'RED' ? 'BLUE' : 'RED';
+    return Promise.all([
+      db.ref(`rooms/${roomCode.value}/pastTurns`).push(currentTurn),
+      dispatch(createTurn(nextTeam)),
+      dispatch(clearGuesses()),
+    ])
     .catch(err => console.error(err));
   }
 );
@@ -117,7 +112,7 @@ export default function (prevState = initialState, action) {
     case SET_TURN_OVER:
       nextState.isOver = action.isOver;
       return nextState;
-    case ADD_GUESSES:
+    case ADD_GUESS:
       nextState.guesses = [...prevState.guesses, action.word];
       return nextState;
     case CLEAR_GUESSES:
