@@ -26,9 +26,11 @@ describe('Room Code Reducer', () => {
       Reducer(roomCodeReducer).expect(action).toChangeInState({ value: 'test' });
     });
     it('should handle UNSET_CODE', () => {
+      const state = Object.assign({}, initialState);
+      state.value = 'test';
       const action = { type: 'UNSET_CODE' };
       Reducer(roomCodeReducer)
-        .withState(Object.assign({ value: 'test' }, initialState))
+        .withState(state)
         .expect(action)
         .toReturnState(initialState);
     });
@@ -38,9 +40,11 @@ describe('Room Code Reducer', () => {
       Reducer(roomCodeReducer).expect(action).toChangeInState({ errors: [error] });
     });
     it('should handle RESET_ERRORS', () => {
+      const state = Object.assign({}, initialState);
+      state.errors = ['Room does not exist'];
       const action = { type: 'RESET_ERRORS' };
       Reducer(roomCodeReducer)
-        .withState(Object.assign({ errors: ['Room does not exist'] }, initialState))
+        .withState(state)
         .expect(action)
         .toReturnState(initialState);
     });

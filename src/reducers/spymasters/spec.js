@@ -32,9 +32,11 @@ describe('Spymasters Reducer', () => {
       Reducer(spymastersReducer).expect(action).toChangeInState({ ownTeam: 'RED' });
     });
     it('should handle UNSET_MASTER_TEAM', () => {
+      const state = Object.assign({}, initialState);
+      state.ownTeam = 'RED';
       const action = { type: 'UNSET_MASTER_TEAM' };
       Reducer(spymastersReducer)
-        .withState(Object.assign({ ownTeam: 'RED' }, initialState))
+        .withState(state)
         .expect(action)
         .toReturnState(initialState);
     });
