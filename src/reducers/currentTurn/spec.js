@@ -4,6 +4,7 @@ import thunks from 'redux-thunk';
 import db from '../../firebase/db';
 
 import currentTurnReducer, {
+  resetCurrentTurn,
   createTurn,
   listenOnCurrentTurn,
   giveClue,
@@ -61,12 +62,25 @@ describe('Current Turn Reducer', () => {
   });
 
   describe('thunks', () => {
+    describe('resetCurrentTurn', () => {
+      it('dispatches the actions to clear currentTurn state', () => {
+        const actions = Thunk(resetCurrentTurn).execute('RED').map(dispatch => dispatch.getAction());
+        expect(actions).toEqual(expect.arrayContaining([
+          { type: 'SET_CURRENT_TEAM', team: 'RED' },
+          { type: 'SET_CURRENT_CLUE', clue: null },
+          { type: 'SET_CURRENT_NUMBER', number: null },
+          { type: 'SET_TURN_OVER', isOver: false },
+          { type: 'CLEAR_GUESSES' },
+        ]));
+      });
+    });
+
     describe('createTurn', () => {
-      let actions;
+      let thunkNames;
       beforeAll(() => (
         seedTestRoom()
         .then(() => Thunk(createTurn).withState(mockStoreInitialState).execute('RED'))
-        .then(dispatches => { actions = dispatches.map(dispatch => dispatch.getAction()); })
+        .then(dispatches => { thunkNames = dispatches.map(dispatch => dispatch.getName()); })
       ));
       it('inserts an empty current turn in db', () => (
         db.ref('rooms/test/currentTurn').once('value')
@@ -76,8 +90,8 @@ describe('Current Turn Reducer', () => {
           expect(isOver).toEqual(false);
         })
       ));
-      it('dispatches SET_CURRENT_TEAM with starting team', () => {
-        expect(actions).toEqual([{ type: 'SET_CURRENT_TEAM', team: 'RED' }]);
+      it('dispatches `resetCurrentTurn` thunk', () => {
+        expect(thunkNames).toEqual(['resetCurrentTurnThunk']);
       });
     });
 

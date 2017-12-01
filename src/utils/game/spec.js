@@ -11,7 +11,7 @@ describe('utils', () => {
       const generate = generateRoomCode();
       return Promise.all([
         expect(generate).resolves.toMatch(/^[\w]{4}$/),
-        expect(generate).resolves.toMatch(/^[^_01lI]{4}$/),
+        expect(generate).resolves.toMatch(/^[^_o0O1lI]{4}$/),
       ]);
     });
     it('never resolves to a room code in use', () => (

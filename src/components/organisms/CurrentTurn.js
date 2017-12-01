@@ -32,12 +32,12 @@ const CurrentTurn = ({ team, clue, number, turnIsOver, end }) => (
             <Typography component="p">Click words to guess</Typography>
           </div> :
           <Typography component="p">WAITING ON SPYMASTER</Typography>}
-        <Button raised onClick={end}>PASS</Button>
-        {turnIsOver &&
-        <div>
-          <Typography type="headline">YOUR TURN IS OVER</Typography>
-          <Button raised onClick={end}>OK</Button>
-        </div>}
+        {turnIsOver ?
+          <div>
+            <Typography type="headline">YOUR TURN IS OVER</Typography>
+            <Button raised onClick={end}>OK</Button>
+          </div> :
+          <Button raised onClick={end}>PASS</Button>}
       </div>
     </CardContent>
   </Card>

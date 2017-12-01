@@ -18,13 +18,19 @@ const addGuess = word => ({ type: ADD_GUESS, word });
 const clearGuesses = () => ({ type: CLEAR_GUESSES });
 
 // thunks
-export const createTurn = startingTeam => (
+export const resetCurrentTurn = (team = 'PENDING') => (
+  function resetCurrentTurnThunk(dispatch) {
+    dispatch(setCurrentTeam(team));
+    dispatch(setCurrentClue(null));
+    dispatch(setCurrentNumber(null));
+    dispatch(setTurnOver(false));
+    dispatch(clearGuesses());
+  }
+);
+export const createTurn = team => (
   function createTurnThunk(dispatch, getState) {
-    return db.ref(`rooms/${getState().roomCode.value}/currentTurn`).set({
-      team: startingTeam,
-      isOver: false,
-    })
-    .then(() => dispatch(setCurrentTeam(startingTeam)))
+    return db.ref(`rooms/${getState().roomCode.value}/currentTurn`).set({ team, isOver: false })
+    .then(() => dispatch(resetCurrentTurn(team)))
     .catch(err => console.error(err));
   }
 );

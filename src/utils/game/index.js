@@ -2,7 +2,7 @@ import _ from 'underscore';
 import db from '../../firebase/db';
 
 const makeValidCode = length => {
-  const validChars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+  const validChars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
   const randIdx = () => Math.floor(Math.random() * validChars.length);
   return new Array(length).fill().map(() => validChars[randIdx()]).join('');
 };
