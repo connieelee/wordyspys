@@ -52,12 +52,11 @@ class LocalGame extends React.Component {
 
   render() {
     return (
-      <Grid container>
-        <Grid item lg={8}>
-          <Board />
-          <Typography type="display3" align="right">WORDYSPYS</Typography>
+      <Grid container className="full-height">
+        <Grid item lg={8} container alignItems="center" justify="center" style={{ backgroundColor: '#607D8B' }}>
+          <Board item />
         </Grid>
-        <Grid item lg={4}>
+        <Grid item lg={4} className="side-panel">
           <SpyMastersStatus />
           <CurrentTurn />
         </Grid>

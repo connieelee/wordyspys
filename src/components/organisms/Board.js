@@ -16,7 +16,7 @@ const mapDispatch = dispatch => ({
 });
 
 const Board = ({ board, selectCard }) => (
-  <div>
+  <div id="board">
     {board.map((row, rowId) => (
       <Grid container>
         {row.map((card, colId) => {
