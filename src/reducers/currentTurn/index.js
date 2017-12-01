@@ -42,9 +42,9 @@ export const listenOnCurrentTurn = () => (
       if (!snapshot.val()) return;
       const { team, clue, number, isOver } = snapshot.val();
       dispatch(setCurrentTeam(team));
-      if (clue) dispatch(setCurrentClue(clue));
-      if (number) dispatch(setCurrentNumber(number));
-      if (isOver) dispatch(setTurnOver(isOver));
+      dispatch(setCurrentClue(clue));
+      dispatch(setCurrentNumber(number));
+      dispatch(setTurnOver(isOver));
     };
     ref.on('value', listener);
     return () => ref.off('value', listener);
