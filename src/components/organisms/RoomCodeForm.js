@@ -48,7 +48,7 @@ class RoomCodeForm extends React.Component {
     .then(error => {
       if (!error) {
         this.props.populateState(code);
-        this.props.attachRoomListener(code);
+        this.props.attachRoomListener();
         this.props.history.push('/masters/team');
       }
     });

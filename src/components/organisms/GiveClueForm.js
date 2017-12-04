@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _ from 'underscore';
 
 import Grid from 'material-ui/Grid';
 import TextField from 'material-ui/TextField';
@@ -10,7 +11,9 @@ import Typography from 'material-ui/Typography';
 
 import { giveClue } from '../../reducers/actionCreators';
 
-const mapState = null;
+const mapState = state => ({
+  openBoardCards: _.flatten(state.board.map(row => row.filter(card => card.status === 'UNTOUCHED'))),
+});
 const mapDispatch = dispatch => ({
   giveClue: (clue, number) => dispatch(giveClue(clue, number)),
 });
@@ -31,12 +34,17 @@ class GiveClueForm extends React.Component {
     let isValid;
     const errors = [];
     if (field === 'clue') {
-      isValid = /^[a-zA-Z]+$/.test(value);
-      if (!isValid) errors.push('Clue must be one word with only alphabet characters');
+      const isEmpty = !value.length;
+      const hasSpace = /\s+/.test(value);
+      const invalidChars = /[^A-Za-z\s]+/.test(value);
+      isValid = !hasSpace && !invalidChars && !isEmpty;
+      if (isEmpty) errors.push('Please enter a clue');
+      if (hasSpace) errors.push('Clue must be one word');
+      if (invalidChars) errors.push('Invalid characters');
     }
     if (field === 'number') {
       isValid = /^\d+$/.test(value);
-      if (!isValid) errors.push('Number must be a positive integer');
+      if (!isValid) errors.push('Number must be positive integer');
     }
     this.setState({
       [field]: {

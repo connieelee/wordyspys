@@ -1,7 +1,9 @@
 import { Reducer, Thunk } from 'redux-testkit';
+import configureMockStore from 'redux-mock-store';
+import thunks from 'redux-thunk';
 import db from '../../firebase/db';
 
-import boardReducer, { createBoard, revealCard } from './';
+import boardReducer, { createBoard, listenOnBoard, revealCard } from './';
 import {
   mockStoreInitialState,
   seedTestRoom,
@@ -47,6 +49,25 @@ describe('Board Reducer', () => {
       });
     });
 
+    describe('listenOnBoard', () => {
+      afterEach(() => db.ref('rooms/test/board').off());
+      it('dispatches SET_BOARD on change', () => {
+        const dispatches = Thunk(listenOnBoard).withState(mockStoreInitialState).execute();
+        return db.ref('rooms/test/board/0/0/status').set('RED')
+        .then(() => {
+          const types = dispatches.map(dispatch => dispatch.getType());
+          expect(types).toEqual(['SET_BOARD']);
+        });
+      });
+      it('returns an unsubscribing function', () => {
+        const store = configureMockStore([thunks])(mockStoreInitialState);
+        const unsubscribe = store.dispatch(listenOnBoard());
+        unsubscribe();
+        return db.ref('rooms/test/board/0/0/status').set('RED')
+        .then(() => expect(store.getActions()).toEqual([]));
+      });
+    });
+
     describe('revealCard', () => {
       const rowId = 0;
       const colId = 0;
@@ -71,6 +92,10 @@ describe('Board Reducer', () => {
       it('dispatches `validateTurn` thunk', () => {
         expect(dispatchedThunks).toEqual(['validateTurnThunk']);
       });
+      it('updates board card status in db', () => (
+        db.ref('rooms/test/board/0/0/status').once('value')
+        .then(snapshot => expect(snapshot.val()).toEqual(status))
+      ));
     });
   });
 });

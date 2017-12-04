@@ -28,15 +28,27 @@ export const createBoard = () => (
     .catch(err => console.error(err));
   }
 );
+export const listenOnBoard = () => (
+  function listenOnBoardThunk(dispatch, getState) {
+    const ref = db.ref(`rooms/${getState().roomCode.value}/board`);
+    const listener = snapshot => {
+      if (!snapshot.val()) return;
+      dispatch(setBoard(snapshot.val()));
+    };
+    ref.on('value', listener);
+    return () => ref.off('value', listener);
+  }
+);
 export const revealCard = (rowId, colId) => (
   function revealCardThunk(dispatch, getState) {
-    return db.ref(`rooms/${getState().roomCode.value}/keyCard/keys`)
-    .child(rowId).child(colId).once('value')
+    const roomRef = db.ref(`rooms/${getState().roomCode.value}`);
+    return roomRef.child(`keyCard/keys/${rowId}/${colId}`).once('value')
     .then(snapshot => {
-      if (!snapshot) return;
+      if (!snapshot) return null;
       const selectedCardKey = snapshot.val();
       dispatch(validateTurn(selectedCardKey));
       dispatch(setCardStatus(rowId, colId, selectedCardKey));
+      return roomRef.child(`board/${rowId}/${colId}/status`).set(selectedCardKey);
     })
     .catch(err => console.error(err));
   }
