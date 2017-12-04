@@ -89,8 +89,8 @@ describe('Board Reducer', () => {
         const expectedSyncActions = [{ type: 'SET_CARD_STATUS', rowId, colId, status }];
         expect(dispatchedSyncActions).toEqual(expectedSyncActions);
       });
-      it('dispatches `validateTurn` thunk', () => {
-        expect(dispatchedThunks).toEqual(['validateTurnThunk']);
+      it('dispatches `checkTurnOver` and `checkGameOver` thunks', () => {
+        expect(dispatchedThunks).toEqual(['checkTurnOverThunk', 'checkGameOverThunk']);
       });
       it('updates board card status in db', () => (
         db.ref('rooms/test/board/0/0/status').once('value')

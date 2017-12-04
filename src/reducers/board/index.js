@@ -1,6 +1,6 @@
 import db from '../../firebase/db';
 import { generateBoard } from '../../utils/game';
-import { validateTurn } from '../actionCreators';
+import { checkTurnOver, checkGameOver } from '../actionCreators';
 
 // constants
 const SET_BOARD = 'SET_BOARD';
@@ -42,11 +42,15 @@ export const listenOnBoard = () => (
 export const revealCard = (rowId, colId) => (
   function revealCardThunk(dispatch, getState) {
     const roomRef = db.ref(`rooms/${getState().roomCode.value}`);
+    let selectedCardKey;
     return roomRef.child(`keyCard/keys/${rowId}/${colId}`).once('value')
     .then(snapshot => {
       if (!snapshot) return null;
-      const selectedCardKey = snapshot.val();
-      dispatch(validateTurn(selectedCardKey));
+      selectedCardKey = snapshot.val();
+      return dispatch(checkTurnOver(selectedCardKey));
+    })
+    .then(() => dispatch(checkGameOver(selectedCardKey)))
+    .then(() => {
       dispatch(setCardStatus(rowId, colId, selectedCardKey));
       return roomRef.child(`board/${rowId}/${colId}/status`).set(selectedCardKey);
     })

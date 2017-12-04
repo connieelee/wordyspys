@@ -6,6 +6,11 @@ export const testRoom = {
   roomCode: 'test',
   board,
   keyCard,
+  gameOver: {
+    status: false,
+    redRemaining: 9,
+    blueRemaining: 8,
+  },
 };
 
 export const seedTestRoom = (config = {}) => {

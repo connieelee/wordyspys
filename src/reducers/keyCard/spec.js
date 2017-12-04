@@ -36,8 +36,8 @@ describe('Key Card Reducer', () => {
           expect(keys).toEqual(expect.any(Array));
         })
       ));
-      it('dispatches `createTurn` thunk', () => {
-        const expectedThunks = ['createTurnThunk'];
+      it('dispatches `createTurn` and `initGameOverTracking` thunks', () => {
+        const expectedThunks = ['createTurnThunk', 'initGameOverTrackingThunk'];
         const dispatchedThunks = dispatches
           .filter(dispatch => dispatch.isFunction())
           .map(dispatch => dispatch.getName());

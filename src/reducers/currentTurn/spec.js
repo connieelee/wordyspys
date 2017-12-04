@@ -9,7 +9,7 @@ import currentTurnReducer, {
   listenOnCurrentTurn,
   giveClue,
   makeGuess,
-  validateTurn,
+  checkTurnOver,
   endTurn,
 } from './';
 import {
@@ -162,6 +162,7 @@ describe('Current Turn Reducer', () => {
           expect(dispatches).toHaveLength(0);
         });
       });
+
       describe('guessing is open', () => {
         const syncActionTypes = [];
         const thunkNames = [];
@@ -179,14 +180,14 @@ describe('Current Turn Reducer', () => {
       });
     });
 
-    describe('validateTurn', () => {
+    describe('checkTurnOver', () => {
       describe('turn should be over', () => {
         describe('team already made maximum number of guesses', () => {
           let actions;
           beforeAll(() => (
             db.ref('rooms/test/currentTurn/isOver').set(false)
             .then(() => (
-              Thunk(validateTurn).withState({
+              Thunk(checkTurnOver).withState({
                 roomCode: { value: 'test' },
                 currentTurn: {
                   team: 'RED',
@@ -205,12 +206,13 @@ describe('Current Turn Reducer', () => {
             expect(actions).toEqual([{ type: 'SET_TURN_OVER', isOver: true }]);
           });
         });
+
         describe('team picks a card that is not theirs', () => {
           let actions;
           beforeAll(() => (
             db.ref('rooms/test/currentTurn/isOver').set(false)
             .then(() => (
-              Thunk(validateTurn).withState({
+              Thunk(checkTurnOver).withState({
                 roomCode: { value: 'test' },
                 currentTurn: {
                   team: 'RED',
@@ -230,9 +232,10 @@ describe('Current Turn Reducer', () => {
           });
         });
       });
+
       describe('turn should continue', () => {
         it('nothing happens', () => (
-          Thunk(validateTurn).withState({
+          Thunk(checkTurnOver).withState({
             currentTurn: {
               team: 'RED',
               number: 2,

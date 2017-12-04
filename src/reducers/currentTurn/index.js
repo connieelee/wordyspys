@@ -70,8 +70,8 @@ export const makeGuess = (word, rowId, colId) => (
     dispatch(revealCard(rowId, colId));
   }
 );
-export const validateTurn = selectedCardKey => (
-  function validateTurnThunk(dispatch, getState) {
+export const checkTurnOver = selectedCardKey => (
+  function checkTurnOverThunk(dispatch, getState) {
     const { guesses, number, team } = getState().currentTurn;
     const outOfGuesses = guesses.length === number + 1;
     const notOurs = selectedCardKey !== team;

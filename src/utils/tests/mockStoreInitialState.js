@@ -17,4 +17,9 @@ export default {
     guesses: [],
     isOver: false,
   },
+  gameOver: {
+    status: false,
+    redRemaining: 8,
+    blueRemaining: 8,
+  },
 };

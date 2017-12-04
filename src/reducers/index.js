@@ -1,15 +1,17 @@
 import { combineReducers } from 'redux';
 
 import board from './board';
-import roomCode from './roomCode';
-import keyCard from './keyCard';
-import spymasters from './spymasters';
 import currentTurn from './currentTurn';
+import gameOver from './gameOver';
+import keyCard from './keyCard';
+import roomCode from './roomCode';
+import spymasters from './spymasters';
 
 export default combineReducers({
   board,
-  roomCode,
-  keyCard,
   currentTurn,
+  gameOver,
+  keyCard,
+  roomCode,
   spymasters,
 });

@@ -1,6 +1,6 @@
 import db from '../../firebase/db';
 import { generateKeyCard } from '../../utils/game';
-import { createTurn } from '../actionCreators';
+import { createTurn, initGameOverTracking } from '../actionCreators';
 
 // constants
 const SET_KEY_CARD = 'SET_KEY_CARD';
@@ -13,7 +13,10 @@ export const createKeyCard = () => (
   function createKeyCardThunk(dispatch, getState) {
     const keyCard = generateKeyCard();
     return db.ref(`rooms/${getState().roomCode.value}/keyCard`).set(keyCard)
-    .then(() => dispatch(createTurn(keyCard.startingTeam)))
+    .then(() => {
+      dispatch(createTurn(keyCard.startingTeam));
+      dispatch(initGameOverTracking(keyCard.startingTeam));
+    })
     .catch(err => console.error(err));
   }
 );
