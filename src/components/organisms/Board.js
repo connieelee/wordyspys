@@ -50,7 +50,7 @@ Board.defaultProps = {
     RED: '#F44336',
     BLUE: '#3F51B5',
     ASSASSIN: '#263238',
-    NEUTRAL: '#E0E0E0',
+    NEUTRAL: '#BDBDBD',
   },
 };
 

@@ -12,7 +12,7 @@ import Typography from 'material-ui/Typography';
 import { giveClue } from '../../reducers/actionCreators';
 
 const mapState = state => ({
-  openBoardCards: _.flatten(state.board.map(row => row.filter(card => card.status === 'UNTOUCHED'))),
+  openCards: _.flatten(state.board.map(row => row.filter(card => card.status === 'UNTOUCHED').map(card => card.word))),
 });
 const mapDispatch = dispatch => ({
   giveClue: (clue, number) => dispatch(giveClue(clue, number)),
@@ -37,10 +37,12 @@ class GiveClueForm extends React.Component {
       const isEmpty = !value.length;
       const hasSpace = /\s+/.test(value);
       const invalidChars = /[^A-Za-z\s]+/.test(value);
-      isValid = !hasSpace && !invalidChars && !isEmpty;
+      const isOnBoard = this.props.openCards.indexOf(value.toUpperCase()) !== -1;
+      isValid = !hasSpace && !invalidChars && !isEmpty && !isOnBoard;
       if (isEmpty) errors.push('Please enter a clue');
       if (hasSpace) errors.push('Clue must be one word');
       if (invalidChars) errors.push('Invalid characters');
+      if (isOnBoard) errors.push('That word is on the board');
     }
     if (field === 'number') {
       isValid = /^\d+$/.test(value);
@@ -74,7 +76,7 @@ class GiveClueForm extends React.Component {
               margin="normal"
             />
             {!!this.state.clue.errors.length && this.state.clue.errors.map(err => (
-              <Grid item key="err">
+              <Grid item key={err}>
                 <Typography color="accent">{err}</Typography>
               </Grid>
             ))}
@@ -89,7 +91,7 @@ class GiveClueForm extends React.Component {
               margin="normal"
             />
             {!!this.state.number.errors.length && this.state.number.errors.map(err => (
-              <Grid item key="err">
+              <Grid item key={err}>
                 <Typography color="accent">{err}</Typography>
               </Grid>
             ))}
@@ -113,6 +115,7 @@ class GiveClueForm extends React.Component {
 
 GiveClueForm.propTypes = {
   giveClue: PropTypes.func.isRequired,
+  openCards: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default connect(mapState, mapDispatch)(GiveClueForm);
