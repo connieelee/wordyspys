@@ -12,7 +12,7 @@ import Typography from 'material-ui/Typography';
 import { giveClue } from '../../reducers/actionCreators';
 
 const mapState = state => ({
-  openCards: _.flatten(state.board.map(row => row.filter(card => card.status === 'UNTOUCHED').map(card => card.word))),
+  unrevealed: _.flatten(state.board.map(row => row.filter(card => card.status === 'UNTOUCHED').map(card => card.word))),
 });
 const mapDispatch = dispatch => ({
   giveClue: (clue, number) => dispatch(giveClue(clue, number)),
@@ -37,7 +37,7 @@ class GiveClueForm extends React.Component {
       const isEmpty = !value.length;
       const hasSpace = /\s+/.test(value);
       const invalidChars = /[^A-Za-z\s]+/.test(value);
-      const isOnBoard = this.props.openCards.indexOf(value.toUpperCase()) !== -1;
+      const isOnBoard = this.props.unrevealed.indexOf(value.toUpperCase()) !== -1;
       isValid = !hasSpace && !invalidChars && !isEmpty && !isOnBoard;
       if (isEmpty) errors.push('Please enter a clue');
       if (hasSpace) errors.push('Clue must be one word');
@@ -115,7 +115,7 @@ class GiveClueForm extends React.Component {
 
 GiveClueForm.propTypes = {
   giveClue: PropTypes.func.isRequired,
-  openCards: PropTypes.arrayOf(PropTypes.string).isRequired,
+  unrevealed: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default connect(mapState, mapDispatch)(GiveClueForm);

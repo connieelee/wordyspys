@@ -8,7 +8,7 @@ const mapDispatch = null;
 
 const InactiveSpymaster = () => (
   <div>
-    <Typography>Wait for your turn!</Typography>
+    <Typography align="center">Wait for your turn!</Typography>
   </div>
 );
 

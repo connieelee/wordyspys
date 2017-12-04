@@ -4,19 +4,28 @@ import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
 import Card from 'material-ui/Card';
+import Typography from 'material-ui/Typography';
 
 const mapState = state => ({
   keys: state.keyCard.keys,
+  revealed: state.board.map(row => row.map(card => {
+    if (card.status !== 'UNTOUCHED') return true;
+    return false;
+  })),
 });
 const mapDispatch = null;
 
-const KeyCard = ({ keys, colors }) => (
+const KeyCard = ({ keys, revealed, colors }) => (
   <div>
-    {keys.map(row => (
+    {keys.map((row, rowId) => (
       <Grid container>
-        {row.map(key => (
+        {row.map((key, colId) => (
           <Grid item className="cols-5">
-            <Card className="key-card" style={{ backgroundColor: colors[key] }} />
+            <Card className="key-card" style={{ backgroundColor: colors[key] }}>
+              <Typography display="headline" align="center" style={{ fontSize: '2rem', color: 'white' }}>
+                {revealed[rowId][colId] && 'X'}
+              </Typography>
+            </Card>
           </Grid>
         ))}
       </Grid>
@@ -26,6 +35,7 @@ const KeyCard = ({ keys, colors }) => (
 
 KeyCard.propTypes = {
   keys: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  revealed: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.bool)).isRequired,
   colors: PropTypes.shape({
     RED: PropTypes.string,
     BLUE: PropTypes.string,
