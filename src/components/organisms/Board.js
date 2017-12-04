@@ -15,28 +15,21 @@ const mapDispatch = dispatch => ({
   selectCard: (word, rowId, colId) => dispatch(makeGuess(word, rowId, colId)),
 });
 
-const Board = ({ board, selectCard }) => (
+const Board = ({ board, selectCard, colors }) => (
   <div id="board">
     {board.map((row, rowId) => (
       <Grid container>
-        {row.map((card, colId) => {
-          let color;
-          if (card.status === 'RED' || card.status === 'BLUE') color = card.status.toLowerCase();
-          else if (card.status === 'ASSASSIN') color = 'black';
-          else if (card.status === 'NEUTRAL') color = 'beige';
-          else color = 'white';
-          return (
-            <Grid key={card.word} item className="cols-5">
-              <Card
-                onClick={() => selectCard(card.word, rowId, colId)}
-                className="word-card"
-                style={{ backgroundColor: color }}
-              >
-                <Typography type="title">{card.word}</Typography>
-              </Card>
-            </Grid>
-          );
-        })}
+        {row.map((card, colId) => (
+          <Grid key={card.word} item className="cols-5">
+            <Card
+              onClick={() => selectCard(card.word, rowId, colId)}
+              className="word-card"
+              style={{ backgroundColor: colors[card.status] }}
+            >
+              <Typography type="title">{card.word}</Typography>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     ))}
   </div>
@@ -45,6 +38,20 @@ const Board = ({ board, selectCard }) => (
 Board.propTypes = {
   board: PropTypes.arrayOf(PropTypes.array).isRequired,
   selectCard: PropTypes.func.isRequired,
+  colors: PropTypes.shape({
+    RED: PropTypes.string,
+    BLUE: PropTypes.string,
+    ASSASSIN: PropTypes.string,
+    NEUTRAL: PropTypes.string,
+  }),
+};
+Board.defaultProps = {
+  colors: {
+    RED: '#F44336',
+    BLUE: '#3F51B5',
+    ASSASSIN: '#263238',
+    NEUTRAL: '#E0E0E0',
+  },
 };
 
 export default connect(mapState, mapDispatch)(Board);
