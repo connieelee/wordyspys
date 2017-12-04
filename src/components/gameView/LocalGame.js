@@ -8,7 +8,7 @@ import {
   SpyMastersStatus,
   CurrentTurn,
   PastTurns,
-} from '../organisms';
+} from './';
 
 import {
   createRoom,

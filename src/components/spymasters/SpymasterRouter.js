@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Grid from 'material-ui/Grid';
-import { SpymasterMain } from './';
 import {
+  SpymasterMain,
   TeamPicker,
   RoomCodeForm,
-} from '../organisms';
+} from './';
 
 import {
   claimMaster,

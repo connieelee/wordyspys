@@ -1,1 +1,2 @@
-export * from './pages';
+export * from './gameView';
+export * from './spymasters';

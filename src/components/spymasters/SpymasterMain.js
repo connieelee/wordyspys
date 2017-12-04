@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import { GiveClueForm, KeyCard } from '../organisms';
+import { GiveClueForm, KeyCard } from './';
 
 import { listenOnCurrentTurn } from '../../reducers/actionCreators';
 

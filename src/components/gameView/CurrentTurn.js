@@ -6,7 +6,7 @@ import Typography from 'material-ui/Typography';
 import Card, { CardContent } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 
-import { passTurn, endTurn } from '../../reducers/actionCreators';
+import { endTurn } from '../../reducers/actionCreators';
 
 const mapState = state => ({
   team: state.currentTurn.team,
