@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Typography from 'material-ui/Typography';
 import Card, { CardContent } from 'material-ui/Card';
+import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button';
 
 const mapState = state => ({
   winner: state.gameOver.winner,
@@ -18,6 +19,7 @@ const GameOver = ({ winner }) => (
         {winner} TEAM WON!
         <span role="img" aria-label="yay!">🎉</span>
       </Typography>
+      <Button raised onClick={() => window.location.reload()}>NEW GAME</Button>
     </CardContent>
   </Card>
 );
