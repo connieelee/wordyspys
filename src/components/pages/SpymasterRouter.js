@@ -13,24 +13,38 @@ import {
 
 import {
   claimMaster,
-  disconnectMaster,
+  listenOnBoard,
   onRoomDisconnect,
+  disconnectMaster,
 } from '../../reducers/actionCreators';
 
 const mapState = state => ({
   roomCode: state.roomCode,
 });
-const mapDispatch = dispatch => ({
-  claimMaster: color => dispatch(claimMaster(color)),
-  disconnect: () => dispatch(disconnectMaster()),
-  onRoomDisconnect: callback => dispatch(onRoomDisconnect(callback)),
-});
+const mapDispatch = dispatch => {
+  let removeBoardListener;
+  let removeRoomListener;
+  return {
+    claimMaster: color => dispatch(claimMaster(color)),
+    listenOnBoard: () => {
+      removeBoardListener = dispatch(listenOnBoard());
+    },
+    onRoomDisconnect: callback => {
+      removeRoomListener = dispatch(onRoomDisconnect(callback));
+    },
+    disconnect: () => {
+      dispatch(disconnectMaster());
+      removeBoardListener();
+      removeRoomListener();
+    },
+  };
+};
 
 class SpymasterRouter extends React.Component {
   constructor() {
     super();
     this.renderWithRedirect = this.renderWithRedirect.bind(this);
-    this.attachRoomListener = this.attachRoomListener.bind(this);
+    this.attachListeners = this.attachListeners.bind(this);
   }
 
   componentDidMount() {
@@ -43,7 +57,8 @@ class SpymasterRouter extends React.Component {
     this.props.disconnect();
   }
 
-  attachRoomListener() {
+  attachListeners() {
+    this.props.listenOnBoard();
     this.props.onRoomDisconnect(() => {
       this.props.history.push('/masters');
     });
@@ -77,7 +92,7 @@ class SpymasterRouter extends React.Component {
             <Route
               path="/masters"
               render={props => (
-                <RoomCodeForm attachRoomListener={this.attachRoomListener} {...props} />
+                <RoomCodeForm attachListeners={this.attachListeners} {...props} />
               )}
             />
           </Switch>
@@ -92,8 +107,9 @@ SpymasterRouter.propTypes = {
     value: PropTypes.string,
     error: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
-  disconnect: PropTypes.func.isRequired,
   onRoomDisconnect: PropTypes.func.isRequired,
+  listenOnBoard: PropTypes.func.isRequired,
+  disconnect: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };
 
