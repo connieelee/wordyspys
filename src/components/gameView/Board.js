@@ -22,7 +22,7 @@ const Board = ({ board, selectCard, colors }) => (
         {row.map((card, colId) => (
           <Grid key={card.word} item className="cols-5">
             <Card
-              onClick={() => selectCard(card.word, rowId, colId)}
+              onClick={card.status === 'UNTOUCHED' ? () => selectCard(card.word, rowId, colId) : null}
               className="word-card"
               style={{ backgroundColor: colors[card.status] }}
             >

@@ -8,6 +8,7 @@ import {
   SpyMastersStatus,
   CurrentTurn,
   PastTurns,
+  GameOver,
 } from './';
 
 import {
@@ -20,7 +21,9 @@ import {
   deleteRoom,
 } from '../../reducers/actionCreators';
 
-const mapState = null;
+const mapState = state => ({
+  gameIsOver: state.gameOver.status,
+});
 const mapDispatch = dispatch => ({
   setup: () => (
     dispatch(createRoom())
@@ -60,17 +63,23 @@ class LocalGame extends React.Component {
         <Grid item lg={8} container alignItems="center" justify="center" style={{ backgroundColor: '#607D8B' }}>
           <Board item />
         </Grid>
-        <Grid item lg={4} style={{ width: '100%' }}>
-          <Grid item><SpyMastersStatus /></Grid>
-          <Grid item><CurrentTurn /></Grid>
-          <Grid item><PastTurns /></Grid>
-        </Grid>
+        {this.props.gameIsOver ?
+          <Grid item lg={4} style={{ width: '100%' }}>
+            <Grid item><GameOver /></Grid>
+            <Grid item><PastTurns /></Grid>
+          </Grid> :
+          <Grid item lg={4} style={{ width: '100%' }}>
+            <Grid item><SpyMastersStatus /></Grid>
+            <Grid item><CurrentTurn /></Grid>
+            <Grid item><PastTurns /></Grid>
+          </Grid>}
       </Grid>
     );
   }
 }
 
 LocalGame.propTypes = {
+  gameIsOver: PropTypes.bool.isRequired,
   setup: PropTypes.func.isRequired,
   listenOnSpymasters: PropTypes.func.isRequired,
   listenOnCurrentTurn: PropTypes.func.isRequired,

@@ -13,6 +13,7 @@ describe('Game Over Reducer', () => {
       status: false,
       redRemaining: 8,
       blueRemaining: 8,
+      winner: null,
     };
     it('should return initial state', () => {
       expect(gameOverReducer(undefined, {})).toEqual(initialState);
@@ -25,11 +26,11 @@ describe('Game Over Reducer', () => {
     });
     it('should handle DECREMENT_REMAINING', () => {
       const action = { type: 'DECREMENT_REMAINING', team: 'RED' };
-      Reducer(gameOverReducer).expect(action).toChangeInState({ redRemaining: initialState.redRemaining - 1 });
+      Reducer(gameOverReducer).expect(action).toChangeInState({ redRemaining: 7 });
     });
-    it('should handle SET_GAME_OVER', () => {
-      const action = { type: 'SET_GAME_OVER' };
-      Reducer(gameOverReducer).expect(action).toChangeInState({ status: true });
+    it('should handle SET_WINNER', () => {
+      const action = { type: 'SET_WINNER', winner: 'RED' };
+      Reducer(gameOverReducer).expect(action).toChangeInState({ status: true, winner: 'RED' });
     });
   });
 
@@ -41,7 +42,7 @@ describe('Game Over Reducer', () => {
         .then(() => Thunk(initGameOverTracking).withState(mockStoreInitialState).execute('RED'))
         .then(dispatches => { actions = dispatches.map(dispatch => dispatch.getAction()); })
       ));
-      it('inserts game-status tracking data to db', () => (
+      it('inserts game status tracking object in db', () => (
         db.ref('rooms/test/gameOver').once('value')
         .then(snapshot => {
           const { status, redRemaining, blueRemaining } = snapshot.val();
@@ -56,69 +57,71 @@ describe('Game Over Reducer', () => {
     });
 
     describe('checkGameOver', () => {
-      fdescribe('game should become over', () => {
+      describe('game should become over', () => {
         describe('team guesses all their words', () => {
-          let actions;
-          beforeAll(() => (
-            seedTestRoom({ gameOver: true })
-            .then(() => (
-              Thunk(checkGameOver).withState({
-                roomCode: { value: 'test' },
-                gameOver: {
-                  status: false,
-                  redRemaining: 1,
-                  blueRemaining: 5,
-                },
-              }).execute('RED')
-              .then(dispatches => { actions = dispatches.map(dispatch => dispatch.getAction()); })
-            ))
-          ));
+          let syncDispatches;
+          let thunkDispatches;
+          beforeAll(() => {
+            const mockState = Object.assign({}, mockStoreInitialState);
+            mockState.gameOver = {
+              status: false,
+              redRemaining: 1,
+              blueRemaining: 5,
+            };
+            return seedTestRoom({ gameOver: true })
+            .then(() => Thunk(checkGameOver).withState(mockState).execute('RED'))
+            .then(dispatches => {
+              syncDispatches = [];
+              thunkDispatches = [];
+              dispatches.forEach(dispatch => {
+                if (dispatch.isPlainObject()) syncDispatches.push(dispatch.getAction());
+                if (dispatch.isFunction()) thunkDispatches.push(dispatch.getName());
+              });
+            });
+          });
           it('updates db', () => (
             db.ref('rooms/test/gameOver/status').once('value')
             .then(snapshot => expect(snapshot.val()).toEqual(true))
           ));
-          it('dispatches SET_GAME_OVER with true', () => {
-            expect(actions).toEqual([{ type: 'SET_GAME_OVER' }]);
+          it('dispatches SET_WINNER with correct team', () => {
+            expect(syncDispatches).toEqual(expect.arrayContaining([{ type: 'SET_WINNER', winner: 'RED' }]));
           });
         });
 
         describe('team picks assassin card', () => {
-          let actions;
-          beforeAll(() => (
-            seedTestRoom({ gameOver: true })
-            .then(() => (
-              Thunk(checkGameOver).withState({
-                roomCode: { value: 'test' },
-                gameOver: {
-                  status: false,
-                  redRemaining: 5,
-                  blueRemaining: 5,
-                },
-              }).execute('ASSASSIN')
-              .then(dispatches => { actions = dispatches.map(dispatch => dispatch.getAction()); })
-            ))
-          ));
+          const syncDispatches = [];
+          const thunkDispatches = [];
+          beforeAll(() => {
+            const mockState = Object.assign({}, mockStoreInitialState);
+            mockState.currentTurn.team = 'RED';
+            return seedTestRoom({ gameOver: true })
+            .then(() => Thunk(checkGameOver).withState(mockState).execute('ASSASSIN'))
+            .then(dispatches => {
+              dispatches.forEach(dispatch => {
+                if (dispatch.isPlainObject()) syncDispatches.push(dispatch.getAction());
+                if (dispatch.isFunction()) thunkDispatches.push(dispatch.getName());
+              });
+            });
+          });
           it('updates db', () => (
             db.ref('rooms/test/gameOver/status').once('value')
             .then(snapshot => expect(snapshot.val()).toEqual(true))
           ));
-          it('dispatches SET_GAME_OVER', () => {
-            expect(actions).toEqual([{ type: 'SET_GAME_OVER' }]);
+          it('dispatches SET_WINNER with winning team', () => {
+            expect(syncDispatches).toEqual([{ type: 'SET_WINNER', winner: 'BLUE' }]);
+          });
+          it('dispatches `endTurn` thunk', () => {
+            expect(thunkDispatches).toEqual(['endTurnThunk']);
           });
         });
       });
 
       describe('game should continue', () => {
-        it('nothing happens', () => (
-          Thunk(checkGameOver).withState({
-            roomCode: { value: 'test' },
-            gameOver: {
-              status: false,
-              redRemaining: 5,
-              blueRemaining: 5,
-            },
-          }).execute('RED')
-          .then(dispatches => expect(dispatches).toHaveLength(0))
+        it('simply decrements remaining count as necessary', () => (
+          Thunk(checkGameOver).withState(mockStoreInitialState).execute('RED')
+          .then(dispatches => {
+            expect(dispatches[0].getAction()).toEqual({ type: 'DECREMENT_REMAINING', team: 'RED' });
+          })
         ));
       });
     });
