@@ -29,7 +29,6 @@ const CurrentTurn = ({ team, clue, number, turnIsOver, end }) => (
             <Typography component="p">
               CLUE: <span className="code">{clue}</span> for <span className="code">{number}</span>
             </Typography>
-            <Typography component="p">Click words to guess</Typography>
           </div> :
           <Typography component="p">WAITING ON SPYMASTER</Typography>}
         {turnIsOver ?
