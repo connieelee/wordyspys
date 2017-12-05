@@ -55,9 +55,11 @@ class LocalGame extends React.Component {
       unsubscribes.push(this.props.listenOnCurrentTurn());
       this.stopListeners = unsubscribes.forEach(func => () => func());
     });
-    window.addEventListener('beforeunload', () => {
-      this.props.disconnect();
-    });
+    if (window.onbeforeunload !== undefined) {
+      window.onbeforeunload = () => this.props.disconnect();
+    } else if (window.onpagehide !== undefined) {
+      window.onpagehide = () => this.props.disconnect();
+    }
   }
 
   componentWillUnmount() {

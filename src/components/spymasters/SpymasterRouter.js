@@ -26,12 +26,8 @@ const mapDispatch = dispatch => {
   let removeRoomListener;
   return {
     claimMaster: color => dispatch(claimMaster(color)),
-    listenOnBoard: () => {
-      removeBoardListener = dispatch(listenOnBoard());
-    },
-    onRoomDisconnect: callback => {
-      removeRoomListener = dispatch(onRoomDisconnect(callback));
-    },
+    listenOnBoard: () => { removeBoardListener = dispatch(listenOnBoard()); },
+    onRoomDisconnect: callback => { removeRoomListener = dispatch(onRoomDisconnect(callback)); },
     disconnect: () => {
       dispatch(disconnectMaster());
       removeBoardListener();
@@ -48,9 +44,11 @@ class SpymasterRouter extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('beforeunload', () => {
-      this.props.disconnect();
-    });
+    if (window.onbeforeunload !== undefined) {
+      window.onbeforeunload = () => this.props.disconnect();
+    } else if (window.onpagehide !== undefined) {
+      window.onpagehide = () => this.props.disconnect();
+    }
   }
 
   componentWillUnmount() {
