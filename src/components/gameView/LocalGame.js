@@ -41,7 +41,7 @@ const mapDispatch = dispatch => ({
       dispatch(createSpymasters());
     })
   ),
-  disconnect: () => dispatch(deleteRoom()),
+  disconnect: () => { dispatch(deleteRoom()); },
   listenOnSpymasters: () => dispatch(listenOnSpymasters()),
   listenOnCurrentTurn: () => dispatch(listenOnCurrentTurn()),
 });
