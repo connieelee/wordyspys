@@ -52,8 +52,8 @@ class Home extends React.Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({
-        logoStyle: Object.assign(styles.logo, styles.logoActive),
-        buttonsStyle: Object.assign(styles.buttons, styles.buttonsActive),
+        logoStyle: Object.assign({}, styles.logo, styles.logoActive),
+        buttonsStyle: Object.assign({}, styles.buttons, styles.buttonsActive),
       });
     }, 500);
   }
