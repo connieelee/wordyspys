@@ -61,27 +61,31 @@ class LocalGame extends React.Component {
 
   render() {
     return (
-      <Grid container className="full-height">
+      <Grid container style={{ minHeight: '100vh', margin: 0 }}>
         <Grid
           item
           lg={8}
           container
           alignItems="center"
           justify="center"
-          style={{ backgroundColor: '#192125' }}
+          style={{ backgroundColor: '#192125', margin: 0 }}
         >
           <Board item />
         </Grid>
-        {this.props.gameIsOver ?
-          <Grid item lg={4} style={{ width: '100%' }}>
-            <Grid item><GameOver /></Grid>
-            <Grid item><PastTurns /></Grid>
-          </Grid> :
-          <Grid item lg={4} style={{ width: '100%' }}>
-            <Grid item><SpyMastersStatus /></Grid>
-            <Grid item><CurrentTurn /></Grid>
-            {/* <Grid item><PastTurns /></Grid> */}
-          </Grid>}
+        <Grid
+          item
+          lg={4}
+          container
+          alignItems="center"
+          style={{ width: '100%', margin: 0 }}
+        >
+          {this.props.gameIsOver ?
+            <Grid item style={{ width: '100%' }}><GameOver /></Grid> :
+            <Grid>
+              <Grid><SpyMastersStatus /></Grid>
+              <Grid><CurrentTurn /></Grid>
+            </Grid>}
+        </Grid>
       </Grid>
     );
   }

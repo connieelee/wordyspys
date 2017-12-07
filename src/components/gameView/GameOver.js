@@ -6,6 +6,21 @@ import Card, { CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 
+const styles = {
+  title: {
+    fontFamily: 'Space Mono',
+    padding: '1vh 0',
+    fontWeight: 'bold',
+  },
+  contentContainer: {
+    padding: '5vh 5vw',
+    textAlign: 'center',
+  },
+  padBottom: {
+    paddingBottom: '3vh',
+  },
+};
+
 const mapState = state => ({
   winner: state.gameOver.winner,
 });
@@ -13,13 +28,13 @@ const mapDispatch = null;
 
 const GameOver = ({ winner }) => (
   <Card className="panel-card">
-    <CardContent>
-      <Typography type="headline" component="h2">THE GAME IS OVER!</Typography>
-      <Typography type="headline">
+    <CardContent style={styles.contentContainer}>
+      <Typography type="headline" style={styles.title}>GAME OVER</Typography>
+      <Typography type="title" style={Object.assign({}, styles.title, styles.padBottom)}>
         {winner} TEAM WON!
-        <span role="img" aria-label="yay!">🎉</span>
+        <span role="img" aria-label="yay!"> 🎉 </span>
       </Typography>
-      <Button raised onClick={() => window.location.reload()}>NEW GAME</Button>
+      <Button color="primary" raised onClick={() => window.location.reload()}>NEW GAME</Button>
     </CardContent>
   </Card>
 );
