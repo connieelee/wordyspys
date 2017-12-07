@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const styles = {
   background: {
-    backgroundColor: 'black',
+    backgroundColor: '#192125',
     margin: 0,
   },
   logo: {

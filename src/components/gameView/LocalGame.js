@@ -21,17 +21,9 @@ import {
   deleteRoom,
 } from '../../reducers/actionCreators';
 
-const mapState = state => {
-  const { gameOver, currentTurn } = state;
-  const colors = {
-    RED: '#FFCDD2',
-    BLUE: '#1E88E5',
-  };
-  return {
-    boardBgColor: gameOver.winner ? colors[gameOver.winner] : colors[currentTurn.team],
-    gameIsOver: gameOver.status,
-  };
-};
+const mapState = state => ({
+  gameIsOver: state.gameOver.status,
+});
 const mapDispatch = dispatch => ({
   setup: () => (
     dispatch(createRoom())
@@ -76,7 +68,7 @@ class LocalGame extends React.Component {
           container
           alignItems="center"
           justify="center"
-          style={{ backgroundColor: this.props.boardBgColor }}
+          style={{ backgroundColor: '#192125' }}
         >
           <Board item />
         </Grid>
@@ -97,14 +89,10 @@ class LocalGame extends React.Component {
 
 LocalGame.propTypes = {
   gameIsOver: PropTypes.bool.isRequired,
-  boardBgColor: PropTypes.string,
   setup: PropTypes.func.isRequired,
   listenOnSpymasters: PropTypes.func.isRequired,
   listenOnCurrentTurn: PropTypes.func.isRequired,
   disconnect: PropTypes.func.isRequired,
-};
-LocalGame.defaultProps = {
-  boardBgColor: '#607D8B',
 };
 
 export default connect(mapState, mapDispatch)(LocalGame);
