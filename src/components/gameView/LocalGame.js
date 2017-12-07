@@ -80,7 +80,7 @@ class LocalGame extends React.Component {
           <Grid item lg={4} style={{ width: '100%' }}>
             <Grid item><SpyMastersStatus /></Grid>
             <Grid item><CurrentTurn /></Grid>
-            <Grid item><PastTurns /></Grid>
+            {/* <Grid item><PastTurns /></Grid> */}
           </Grid>}
       </Grid>
     );

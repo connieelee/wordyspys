@@ -14,7 +14,7 @@ const styles = {
     padding: '1rem 2rem',
     marginBottom: '1rem',
     fontFamily: 'Space Mono',
-    fontSize: '4rem',
+    fontSize: '9vw',
     color: 'white',
     opacity: 0,
     transition: 'opacity 2s',

@@ -5,6 +5,33 @@ import { connect } from 'react-redux';
 import Typography from 'material-ui/Typography';
 import Card, { CardContent } from 'material-ui/Card';
 
+const styles = {
+  title: {
+    fontFamily: 'Space Mono',
+    padding: '1vh 0',
+    fontWeight: 'bold',
+  },
+  contentContainer: {
+    padding: '1vh 5vw',
+  },
+  largerFont: {
+    fontSize: '1rem',
+  },
+  padBottom: {
+    paddingBottom: '3vh',
+  },
+  redText: {
+    color: '#F44336',
+  },
+  blueText: {
+    color: '#3F51B5',
+  },
+  teamText: {
+    fontFamily: 'Space Mono',
+    fontWeight: 'bold',
+  },
+};
+
 const mapState = state => ({
   roomCode: state.roomCode,
   redTaken: state.spymasters.taken.RED,
@@ -14,22 +41,25 @@ const mapDispatch = null;
 
 const SpyMastersStatus = ({ roomCode, redTaken, blueTaken }) => (
   <Card className="panel-card">
-    <CardContent>
-      <Typography type="headline" component="h2">
+    <CardContent className="text-center">
+      <Typography type="headline" component="h2" style={styles.title}>
         SPY MASTERS STATUS
       </Typography>
-      <div>
+      <div style={styles.contentContainer}>
         {(!redTaken || !blueTaken) &&
-        <Typography component="p">
-          To access the key card, visit wordyspys.firebaseapp.com/masters
-          on a mobile device and enter the code
+        <Typography component="p" style={Object.assign({}, styles.largerFont, styles.padBottom)}>
+          Join as a spymaster at
+          <span className="code"> wordyspys.firebaseapp.com </span>
+          with the code
           <span className="code"> {roomCode.value}</span>
         </Typography>}
-        <Typography component="p">
-          RED TEAM: {redTaken ? 'Joined!' : 'Waiting for a spy master'}
+        <Typography component="p" style={styles.largerFont}>
+          <span style={Object.assign({}, styles.redText, styles.teamText)}>RED TEAM:</span>
+          {redTaken ? ' Joined!' : ' Pending'}
         </Typography>
-        <Typography component="p">
-          BLUE TEAM: {blueTaken ? 'Joined!' : 'Waiting for a spy master'}
+        <Typography component="p" style={styles.largerFont}>
+          <span style={Object.assign({}, styles.blueText, styles.teamText)}>BLUE TEAM:</span>
+          {blueTaken ? ' Joined!' : ' Pending'}
         </Typography>
       </div>
     </CardContent>
