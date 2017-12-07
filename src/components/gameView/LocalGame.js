@@ -61,7 +61,7 @@ class LocalGame extends React.Component {
 
   render() {
     return (
-      <Grid container style={{ minHeight: '100vh', margin: 0 }}>
+      <Grid container style={{ minHeight: '100vh', maxWidth: '100vw', margin: 0 }}>
         <Grid
           item
           lg={8}

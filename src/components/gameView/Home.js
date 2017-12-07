@@ -8,6 +8,7 @@ const styles = {
   background: {
     backgroundColor: '#192125',
     margin: 0,
+    maxWidth: '100vw',
   },
   logo: {
     border: '2px solid green',
