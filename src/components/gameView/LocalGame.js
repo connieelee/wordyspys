@@ -7,7 +7,6 @@ import {
   Board,
   SpyMastersStatus,
   CurrentTurn,
-  PastTurns,
   GameOver,
 } from './';
 

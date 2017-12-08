@@ -12,10 +12,10 @@ const styles = {
   },
   logo: {
     border: '2px solid green',
-    padding: '1rem 2rem',
+    padding: '1vh 5vw',
     marginBottom: '1rem',
     fontFamily: 'Space Mono',
-    fontSize: '9vw',
+    fontSize: '3rem',
     color: 'white',
     opacity: 0,
     transition: 'opacity 2s',
