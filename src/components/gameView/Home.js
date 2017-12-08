@@ -16,6 +16,7 @@ const styles = {
     marginBottom: '1rem',
     fontFamily: 'Space Mono',
     fontSize: '3rem',
+    textAlign: 'center',
     color: 'white',
     opacity: 0,
     transition: 'opacity 2s',
@@ -71,7 +72,7 @@ class Home extends React.Component {
       >
         <Grid item>
           <Typography style={this.state.logoStyle}>
-            - wordy spys -
+            wordy spys
           </Typography>
         </Grid>
         <Grid item style={this.state.buttonsStyle}>
